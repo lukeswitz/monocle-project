@@ -93,7 +93,7 @@ while True:
         send_audio(state, gfx, bluetooth_send_message)
 
     elif state.current_state == state.WaitForResponse:
-        gfx.set_prompt("Waiting for openAI")
+        gfx.set_prompt("Waiting for OpenAI")
 
     elif state.current_state == state.AskToCancel:
         gfx.set_prompt("Cancel?")

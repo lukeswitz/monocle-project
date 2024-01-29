@@ -15,8 +15,11 @@ async def record_audio(state, gfx, send_message):
         await microphone.record_async(seconds=6.0, bit_depth=8, sample_rate=8000)
         send_message_based_on_state(state, send_message)
     except Exception as e:
-        # Implement error handling logic here
-        pass
+        let errorDescription = error.localizedDescription
+        print("Recording Error: \(errorDescription)")
+        gfx.clear_response()
+        gfx.set_prompt("Error: ", e)
+        
 
 def send_message_based_on_state(state, send_message):
     if state.previous_state == state.SendImage:
@@ -34,8 +37,11 @@ async def send_audio(state, gfx, send_message):
         )
         process_audio_chunks(chunk1, chunk2, send_message, state)
     except Exception as e:
-        # Implement error handling logic here
-        pass
+        let errorDescription = error.localizedDescription
+        print("Audio Error: \(errorDescription)")
+        gfx.clear_response()
+        gfx.set_prompt("Error:", e)
+        
 
 def update_gfx_prompt_based_on_time(state, gfx):
     elapsed_time = state.has_been()

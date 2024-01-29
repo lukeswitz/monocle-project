@@ -56,7 +56,7 @@
 		CCB2F9662A2598F600F24F2D /* HexDump.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB2F9652A2598F600F24F2D /* HexDump.swift */; };
 		CCB2F9682A25990F00F24F2D /* UtilNamespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB2F9672A25990F00F24F2D /* UtilNamespace.swift */; };
 		CCBC46262A02101A00871C12 /* Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCBC46252A02101A00871C12 /* Participant.swift */; };
-		CCCECE6B2A1EB4B100DBB7CA /* WhisperTranslation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCECE6A2A1EB4B100DBB7CA /* WhisperTranslation.swift */; };
+		CCCECE6B2A1EB4B100DBB7CA /* Whisper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCECE6A2A1EB4B100DBB7CA /* Whisper.swift */; };
 		CCCECE6D2A1EE7C700DBB7CA /* AIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCECE6C2A1EE7C700DBB7CA /* AIError.swift */; };
 		CCCECE742A1EF36C00DBB7CA /* Question_History.wav in Resources */ = {isa = PBXBuildFile; fileRef = CCCECE6E2A1EF36C00DBB7CA /* Question_History.wav */; };
 		CCCECE752A1EF36C00DBB7CA /* Question_Movies.wav in Resources */ = {isa = PBXBuildFile; fileRef = CCCECE6F2A1EF36C00DBB7CA /* Question_Movies.wav */; };
@@ -73,6 +73,10 @@
 		CCEE17572ACF8CC1000170F5 /* Tutorial_3.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEE17532ACF8CC1000170F5 /* Tutorial_3.png */; };
 		CCF9DA812A5C9C46004C1EAE /* SettingsMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA802A5C9C46004C1EAE /* SettingsMenuView.swift */; };
 		CCF9DA852A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA842A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift */; };
+		EB1719332B644983000A3F34 /* SpeechToTextlator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1719322B644983000A3F34 /* SpeechToTextlator.swift */; };
+		EBE6E6D22B6852E40095D781 /* APIKeyPopupBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE6E6D12B6852E40095D781 /* APIKeyPopupBoxView.swift */; };
+		EBF0961B2B6582D300688F33 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF0961A2B6582D300688F33 /* OpenAIService.swift */; };
+		EBF0961D2B65862300688F33 /* SpeechToText.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF0961C2B65862300688F33 /* SpeechToText.swift */; };
 		F8B8D4792A71761700817A24 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */; };
 		F8BC4DE52A4DBD680005F6F0 /* DeviceScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC4DE42A4DBD680005F6F0 /* DeviceScreenView.swift */; };
 /* End PBXBuildFile section */
@@ -147,7 +151,7 @@
 		CCB2F9652A2598F600F24F2D /* HexDump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexDump.swift; sourceTree = "<group>"; };
 		CCB2F9672A25990F00F24F2D /* UtilNamespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilNamespace.swift; sourceTree = "<group>"; };
 		CCBC46252A02101A00871C12 /* Participant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Participant.swift; sourceTree = "<group>"; };
-		CCCECE6A2A1EB4B100DBB7CA /* WhisperTranslation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperTranslation.swift; sourceTree = "<group>"; };
+		CCCECE6A2A1EB4B100DBB7CA /* Whisper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Whisper.swift; sourceTree = "<group>"; };
 		CCCECE6C2A1EE7C700DBB7CA /* AIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIError.swift; sourceTree = "<group>"; };
 		CCCECE6E2A1EF36C00DBB7CA /* Question_History.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Question_History.wav; sourceTree = "<group>"; };
 		CCCECE6F2A1EF36C00DBB7CA /* Question_Movies.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Question_Movies.wav; sourceTree = "<group>"; };
@@ -164,6 +168,10 @@
 		CCEE17532ACF8CC1000170F5 /* Tutorial_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tutorial_3.png; sourceTree = "<group>"; };
 		CCF9DA802A5C9C46004C1EAE /* SettingsMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuView.swift; sourceTree = "<group>"; };
 		CCF9DA842A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModeAdaptiveImage.swift; sourceTree = "<group>"; };
+		EB1719322B644983000A3F34 /* SpeechToTextlator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechToTextlator.swift; sourceTree = "<group>"; };
+		EBE6E6D12B6852E40095D781 /* APIKeyPopupBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyPopupBoxView.swift; sourceTree = "<group>"; };
+		EBF0961A2B6582D300688F33 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
+		EBF0961C2B65862300688F33 /* SpeechToText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechToText.swift; sourceTree = "<group>"; };
 		F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
 		F8BC4DE42A4DBD680005F6F0 /* DeviceScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -263,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				CCF9DA802A5C9C46004C1EAE /* SettingsMenuView.swift */,
+				EBE6E6D12B6852E40095D781 /* APIKeyPopupBoxView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -306,10 +315,13 @@
 			isa = PBXGroup;
 			children = (
 				CC3FE0352A0F12F700756941 /* AIAssistant.swift */,
-				CCCECE6A2A1EB4B100DBB7CA /* WhisperTranslation.swift */,
+				CCCECE6A2A1EB4B100DBB7CA /* Whisper.swift */,
 				CCCECE6C2A1EE7C700DBB7CA /* AIError.swift */,
+				EB1719322B644983000A3F34 /* SpeechToTextlator.swift */,
 				CC212D672A9D34A90093479F /* StableDiffusion.swift */,
 				CCDEE1952AEB74C30093575B /* APIKey.swift */,
+				EBF0961A2B6582D300688F33 /* OpenAIService.swift */,
+				EBF0961C2B65862300688F33 /* SpeechToText.swift */,
 			);
 			path = AI;
 			sourceTree = "<group>";
@@ -619,6 +631,7 @@
 				CC212D6A2A9D6FDB0093479F /* CVPixelBuffer+Extensions.swift in Sources */,
 				CC4E3AF52A01A7A90058AC20 /* ChatMessageStore.swift in Sources */,
 				CC3FE0362A0F12F700756941 /* AIAssistant.swift in Sources */,
+				EBE6E6D22B6852E40095D781 /* APIKeyPopupBoxView.swift in Sources */,
 				CC3FE0262A0EEAA900756941 /* MockInputGenerator.swift in Sources */,
 				CCB2F9662A2598F600F24F2D /* HexDump.swift in Sources */,
 				CCBC46262A02101A00871C12 /* Participant.swift in Sources */,
@@ -634,14 +647,17 @@
 				CCDEE1962AEB74C30093575B /* APIKey.swift in Sources */,
 				CC212D682A9D34A90093479F /* StableDiffusion.swift in Sources */,
 				CC3FE01F2A0DF21700756941 /* AppDelegate.swift in Sources */,
+				EBF0961B2B6582D300688F33 /* OpenAIService.swift in Sources */,
 				CC3FE0212A0DF25100756941 /* SceneDelegate.swift in Sources */,
-				CCCECE6B2A1EB4B100DBB7CA /* WhisperTranslation.swift in Sources */,
+				CCCECE6B2A1EB4B100DBB7CA /* Whisper.swift in Sources */,
+				EBF0961D2B65862300688F33 /* SpeechToText.swift in Sources */,
 				CCF9DA812A5C9C46004C1EAE /* SettingsMenuView.swift in Sources */,
 				CC07BD9B2A1962DC0082999A /* M4AWriter.swift in Sources */,
 				CC07BD9D2A19632F0082999A /* AVAudioPCMBuffer+Extensions.swift in Sources */,
 				CC0039A52A6DA57E009E3BAC /* ContentView.swift in Sources */,
 				CC1632402AA6A0AC006A8E6A /* RGB343.swift in Sources */,
 				CC3FE00D2A09C8A400756941 /* Settings.swift in Sources */,
+				EB1719332B644983000A3F34 /* SpeechToTextlator.swift in Sources */,
 				F8B8D4792A71761700817A24 /* LoopingVideoPlayer.swift in Sources */,
 				CCD4B9022A93EB47004E3ADD /* NoaApp.swift in Sources */,
 				CC4E3AF32A00C4180058AC20 /* MessageView.swift in Sources */,
@@ -803,10 +819,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Noa/Preview Content\"";
-				DEVELOPMENT_TEAM = TWKJ9RPH32;
+				DEVELOPMENT_TEAM = A64B5QV548;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Noa-Info.plist";
@@ -817,20 +834,21 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.brilliant.argpt;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.monocle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -839,10 +857,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Noa/Preview Content\"";
-				DEVELOPMENT_TEAM = TWKJ9RPH32;
+				DEVELOPMENT_TEAM = A64B5QV548;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Noa-Info.plist";
@@ -853,20 +872,21 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.brilliant.argpt;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.monocle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

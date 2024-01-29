@@ -152,9 +152,11 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
     private var _imageData = Data()
 
     private let _m4aWriter = M4AWriter()
-    private let _voiceTranslator = WhisperTranslation(configuration: .backgroundData)
+    private let _whisper = Whisper(configuration: .backgroundData)
     private let _aiAssistant = AIAssistant(configuration: .backgroundData)
     private let _stableDiffusion = StableDiffusion(configuration: .backgroundData)
+    
+    private var _pendingQueryByID: [UUID: String] = [:]
 
     // Debug audio playback (use setupAudioSession() and playReceivedAudio() on PCM buffer decoded
     // from Monocle)
@@ -422,8 +424,25 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
     public func submitQuery(query: String) {
         let fakeID = UUID()
         print("[Controller] Sending iOS query with transcription ID \(fakeID) to ChatGPT: \(query)")
-        submitTextQuery(query: query)
+        submitQuery(query: query, transcriptionID: fakeID)
     }
+    
+//    private func submitQuery(query: String, transcriptionID id: UUID) {
+//        // User message
+//        printToChat(query, as: .user)
+//
+//        // Send to ChatGPT
+//        let responder = mode == .assistant ? Participant.assistant : Participant.translator
+//        printTypingIndicatorToChat(as: responder)
+//        _aiAssistant.send(mode: mode, query: query, apiKey: _settings.openAIKey, model: _settings.gptModel) { [weak self] (response: String, error: AIError?) in
+//            if let error = error {
+//                self?.printErrorToChat(error.description, as: responder)
+//            } else {
+//                self?.printToChat(response, as: responder)
+//                print("[Controller] Received response from ChatGPT for \(id): \(response)")
+//            }
+//        }
+//    }
 
     /// Clear chat history, including ChatGPT context window.
     public func clearHistory() {
@@ -987,68 +1006,52 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
 
     // Step 2: Send voice query (send to LLM, image generation, or translation)
     private func processVoice(audioFile fileData: Data, mode: AIAssistant.Mode) {
-        if _imageData.isEmpty {
-            // No image data, query GPT or Whisper (translation only)
-            let responder = mode == .assistant ? Participant.assistant : Participant.translator
-            if mode == .assistant {
-                _aiAssistant.send(
-                    mode: mode,
-                    audio: fileData,
-                    model: _settings.gptModel
-                ) { [weak self] (userPrompt: String, response: String, error: AIError?) in
-                    if let error = error {
-                        self?.printErrorToChat(error.description, as: responder)
-                    } else {
-                        if mode == .assistant {
-                            self?.printToChat(userPrompt, as: .user)
-                        }
-                        self?.printToChat(response, as: responder)
-                        print("[Controller] Received response from ChatGPT")
-                    }
+        print("[Controller] Transcribing voice...")
+
+        _whisper.transcribe(mode: mode == .assistant ? .transcription : .translation, fileData: fileData, format: .m4a, apiKey: _settings.openAIKey) { [weak self] (query: String, error: AIError?) in
+            guard let self = self else { return }
+            if let error = error {
+                printErrorToChat(error.description, as: .user)
+            } else if _imageData.isEmpty {
+                // No image data: normal operation (assistant or translator)
+                if mode == .assistant {
+                    // Store query and send ID to Monocle. We need to do this because we cannot perform
+                    // back-to-back network requests in background mode. Monocle will reply back with
+                    // the ID, allowing us to perform a ChatGPT request.
+                    let id = UUID()
+                    _pendingQueryByID[id] = query
+                    send(text: "pin:" + id.uuidString, to: _monocleBluetooth, on: Self._dataRx)
+                    print("[Controller] Sent transcription ID to Monocle: \(id)")
+                } else {
+                    // Translation mode: No more network requests to do. Display translation.
+                    printToChat(query, as: .translator)
+                    print("[Controller] Translation received: \(query)")
                 }
             } else {
-                _voiceTranslator.translate(
-                    fileData: fileData,
-                    format: .m4a
-                ) { [weak self] (query: String, error: AIError?) in
-                    guard let self = self else { return }
-                    if let error = error {
-                        printErrorToChat(error.description, as: .user)
-                    } else {
-                        // Display translation
-                        printToChat(query, as: .translator)
-                        print("[Controller] Translation received: \(query)")
-                    }
-                }
+                // Have image data, perform image generation
+                generateImage(prompt: query)
             }
-        } else {
-            // Have image data, perform image generation
-            generateImage(audioFile: fileData)
         }
     }
-
-    private func submitTextQuery(query: String) {
+    
+    private func submitQuery(query: String, transcriptionID id: UUID) {
         // User message
         printToChat(query, as: .user)
 
         // Send to ChatGPT
         let responder = mode == .assistant ? Participant.assistant : Participant.translator
         printTypingIndicatorToChat(as: responder)
-        _aiAssistant.send(
-            mode: mode,
-            query: query,
-            model: _settings.gptModel
-        ) { [weak self] (_: String, response: String, error: AIError?) in
+        _aiAssistant.send(mode: mode, query: query, apiKey: _settings.openAIKey, model: _settings.gptModel) { [weak self] (response: String, error: AIError?) in
             if let error = error {
                 self?.printErrorToChat(error.description, as: responder)
             } else {
                 self?.printToChat(response, as: responder)
-                print("[Controller] Received response from ChatGPT")
+                print("[Controller] Received response from ChatGPT for \(id): \(response)")
             }
         }
     }
-
-    private func generateImage(audioFile fileData: Data) {
+    
+    private func generateImage(prompt: String) {
         // Monocle will not receive anything, tell it to go back to idle (ick = image ack)
         send(text: "ick:", to: _monocleBluetooth, on: Self._dataRx)
 
@@ -1058,18 +1061,19 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
             return
         }
 
-        // Display image as user immediately
-        printToChat("", picture: picture, as: .user)
+        // Display image as user
+        printToChat(prompt, picture: picture, as: .user)
 
         // Submit to Stable Diffusion
         printTypingIndicatorToChat(as: .assistant)
         _stableDiffusion.imageToImage(
             image: picture,
-            audio: fileData,
+            prompt: prompt,
             model: _settings.stableDiffusionModel,
             strength: _settings.imageStrength,
-            guidance: _settings.imageGuidance
-        ) { [weak self] (image: UIImage?, prompt: String, error: AIError?) in
+            guidance: _settings.imageGuidance,
+            apiKey: _settings.stabilityAIKey
+        ) { [weak self] (image: UIImage?, error: AIError?) in
             if let error = error {
                 self?.printErrorToChat(error.description, as: .assistant)
             } else if let picture = image?.centerCropped(to: CGSize(width: 640, height: 400)) { // crop out the letterboxing we had to introduce and return to original size
@@ -1083,6 +1087,63 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
             }
         }
     }
+
+//    private func submitTextQuery(query: String) {
+//        // User message
+//        printToChat(query, as: .user)
+//
+//        // Send to ChatGPT
+//        let responder = mode == .assistant ? Participant.assistant : Participant.translator
+//        printTypingIndicatorToChat(as: responder)
+//        _aiAssistant.send(
+//            mode: mode,
+//            query: query,
+//            model: _settings.gptModel
+//        ) { [weak self] (_: String, response: String, error: AIError?) in
+//            if let error = error {
+//                self?.printErrorToChat(error.description, as: responder)
+//            } else {
+//                self?.printToChat(response, as: responder)
+//                print("[Controller] Received response from ChatGPT")
+//            }
+//        }
+//    }
+
+//    private func generateImage(audioFile fileData: Data) {
+//        // Monocle will not receive anything, tell it to go back to idle (ick = image ack)
+//        send(text: "ick:", to: _monocleBluetooth, on: Self._dataRx)
+//
+//        // Attempt to decode image
+//        guard let picture = UIImage(data: _imageData) else {
+//            printErrorToChat("Photo could not be decoded", as: .user)
+//            return
+//        }
+//
+//        // Display image as user immediately
+//        printToChat("", picture: picture, as: .user)
+//
+//        // Submit to Stable Diffusion
+//        printTypingIndicatorToChat(as: .assistant)
+//        _stableDiffusion.imageToImage(
+//            image: picture,
+//            audio: fileData,
+//            model: _settings.stableDiffusionModel,
+//            strength: _settings.imageStrength,
+//            guidance: _settings.imageGuidance
+//        ) { [weak self] (image: UIImage?, prompt: String, error: AIError?) in
+//            if let error = error {
+//                self?.printErrorToChat(error.description, as: .assistant)
+//            } else if let picture = image?.centerCropped(to: CGSize(width: 640, height: 400)) { // crop out the letterboxing we had to introduce and return to original size
+//                self?.printToChat(prompt, picture: picture, as: .assistant)
+//
+//                //TODO: this does not seem to work yet
+//                //self?.sendImageToMonocleInChunks(image: picture)
+//            } else {
+//                // No picture but also no explicit error
+//                self?.printErrorToChat("No image received", as: .assistant)
+//            }
+//        }
+//    }
 
     // MARK: Result Output
 

@@ -15,7 +15,7 @@ struct Participant: Equatable {
         return !imageName.isEmpty
     }
 
-    public static let user = Participant(name: "Me", imageName: "MonocleIcon")
+    public static let user = Participant(name: "Me", imageName: "jx-smiley")
     public static let assistant = Participant(name: "Assistant", imageName: "ChatGPTIcon")
-    public static let translator = Participant(name: "Translator", imageName: "ChatGPTIcon")
+    public static let translator = Participant(name: "Speech2Text", imageName: "jx-owl")
 }

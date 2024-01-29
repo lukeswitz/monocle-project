@@ -39,7 +39,7 @@ class M4AWriter: NSObject, AVAssetWriterDelegate {
         let audioSettings: [String: Any] = [
             AVFormatIDKey: kAudioFormatMPEG4AAC,
             AVSampleRateKey: 44100,     // voice transcription models want 16 KHz but AVAssetWriter can only encode 44.1 and 48KHz
-            AVNumberOfChannelsKey: 1,   // we want only a single channel
+            AVNumberOfChannelsKey: 1,   // TEST mono vs stereo
             AVEncoderBitRateKey: 128000
         ]
 

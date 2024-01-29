@@ -7,7 +7,7 @@ def capture_image(state, gfx, send_message):
         camera.capture()
         send_message(b"ist:")
         gfx.clear_response()
-        gfx.set_prompt("Sending photo [     ]")
+        gfx.set_prompt("Sending image [     ]")
     state.after(250, state.SendImage)
 
 def send_image(state, gfx, send_message):
@@ -25,12 +25,12 @@ def send_image(state, gfx, send_message):
         benchmark_size = 64000
         percent = state.current_state.bytes_sent / benchmark_size
         if percent > 0.8:
-            gfx.set_prompt("Sending photo [=====]")
+            gfx.set_prompt("Sending image [=====]")
         elif percent > 0.6:
-            gfx.set_prompt("Sending photo [==== ]")
+            gfx.set_prompt("Sending image [==== ]")
         elif percent > 0.4:
-            gfx.set_prompt("Sending photo [===  ]")
+            gfx.set_prompt("Sending image [===  ]")
         elif percent > 0.2:
-            gfx.set_prompt("Sending photo [==   ]")
+            gfx.set_prompt("Sending image [==   ]")
         else:
-            gfx.set_prompt("Sending photo [=    ]")
+            gfx.set_prompt("Sending image [=    ]")

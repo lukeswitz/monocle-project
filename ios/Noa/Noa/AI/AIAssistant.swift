@@ -8,220 +8,171 @@
 import UIKit
 
 public class AIAssistant: NSObject {
+    // Network configurations for different usage scenarios.
     public enum NetworkConfiguration {
         case normal
         case backgroundData
         case backgroundUpload
     }
 
+    // Modes for different functionalities: assistant or translator.
     public enum Mode {
         case assistant
         case translator
     }
 
-    private static let _maxTokens = 4000    // 4096 for gpt-3.5-turbo and larger for gpt-4, but we use a conservative number to avoid hitting that limit
+    // Conservative token limit, but can be adjusted based on model capabilities.
+    private static var maxTokens = 2000
 
-    private struct CompletionData {
-        let completion: (String, String, AIError?) -> Void
-        let wasAudioPrompt: Bool
-    }
+    // URLSession to manage network requests.
+    private var session: URLSession!
+    // Dictionary to map tasks to their completion handlers.
+    private var completionByTask: [Int: (String, AIError?) -> Void] = [:]
+    // URL for temporary file used in background upload tasks.
+    private var tempFileURL: URL?
 
-    private var _session: URLSession!
-    private var _completionByTask: [Int: CompletionData] = [:]
-    private var _tempFileURL: URL?
+    // Predefined prompts for different modes.
+    private static let assistantPrompt = "You are a smart assistant that answers all user queries, questions, and statements with a single sentence."
+    private static let translatorPrompt = "You are a smart assistant that translates user input to English. Translate as faithfully as you can and do not add any other commentary."
 
-    private static let _assistantPrompt = "You are a smart assistant that answers all user queries, questions, and statements with a single sentence."
-    private static let _translatorPrompt = "You are a smart assistant that translates user input to English. Translate as faithfully as you can and do not add any other commentary."
-
-    private var _payload: [String: Any] = [
-        "model": "gpt-3.5-turbo",
-        "messages": [
-            [
-                "role": "system",
-                "content": ""   // remember to set
-            ]
-        ]
+    // API Payload structure.
+    private var payload: [String: Any] = [
+        "model": "gpt-3.5-turbo", // Default model, adjustable via init or send method.
+        "messages": [[ "role": "system", "content": ""]]
     ]
 
-    public init(configuration: NetworkConfiguration) {
+    // Initializer with network configuration.
+    public init(configuration: NetworkConfiguration, model: String = "gpt-3.5-turbo") {
         super.init()
+        payload["model"] = model
+        configureSession(with: configuration)
+    }
 
+    // Configure URLSession based on the network configuration.
+    private func configureSession(with configuration: NetworkConfiguration) {
         switch configuration {
         case .normal:
-            _session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+            session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
         case .backgroundUpload:
-            // Background upload tasks use a file (uploadTask() can only be called from background
-            // with a file)
-            _tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString)
+            tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString)
             fallthrough
         case .backgroundData:
-            // Configure a URL session that supports background transfers
-            let configuration = URLSessionConfiguration.background(withIdentifier: "ChatGPT-\(UUID().uuidString)")
-            configuration.isDiscretionary = false
-            configuration.shouldUseExtendedBackgroundIdleMode = true
-            configuration.sessionSendsLaunchEvents = true
-            configuration.allowsConstrainedNetworkAccess = true
-            configuration.allowsExpensiveNetworkAccess = true
-            _session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+            let config = URLSessionConfiguration.background(withIdentifier: "AIAssistant-\(UUID().uuidString)")
+            configureBackgroundSession(config: config)
+            session = URLSession(configuration: config, delegate: self, delegateQueue: nil)
         }
     }
 
+    // Additional configuration for background sessions.
+    private func configureBackgroundSession(config: URLSessionConfiguration) {
+        config.isDiscretionary = false
+        config.shouldUseExtendedBackgroundIdleMode = true
+        config.sessionSendsLaunchEvents = true
+        config.allowsConstrainedNetworkAccess = true
+        config.allowsExpensiveNetworkAccess = true
+    }
+
+    // Method to clear the chat history.
     public func clearHistory() {
-        // To clear history, remove all but the very first message
-        if var messages = _payload["messages"] as? [[String: String]],
+        if var messages = payload["messages"] as? [[String: String]],
            messages.count > 1 {
             messages.removeSubrange(1..<messages.count)
-            _payload["messages"] = messages
+            payload["messages"] = messages
             print("[AIAssistant] Cleared history")
         }
     }
 
-    public func send(mode: Mode, audio: Data, model: String, completion: @escaping (String, String, AIError?) -> Void) {
-        send(mode: mode, audio: audio, query: nil, model: model, completion: completion)
-    }
-
-    public func send(mode: Mode, query: String, model: String, completion: @escaping (String, String, AIError?) -> Void) {
-        send(mode: mode, audio: nil, query: query, model: model, completion: completion)
-    }
-
-    private func send(mode: Mode, audio: Data?, query: String?, model: String, completion: @escaping (String, String, AIError?) -> Void) {
-        // Either audio or text prompt only
-        if audio != nil && query != nil {
-            fatalError("ChatGPT.send() cannot have both audio and text prompts")
-        } else if audio == nil && query == nil {
-            fatalError("ChatGPT.send() must have either an audio or text prompt")
-        }
-
-        let boundary = UUID().uuidString
-
-        // Set up conversation details and append user prompt if we know it now. If input is audio,
-        // we will not be able to do this until we get the response.
-        _payload["model"] = model
+    // Send method with improved error handling and dynamic model setting.
+    public func send(mode: Mode, query: String, apiKey: String, model: String, completion: @escaping (String, AIError?) -> Void) {
+        payload["model"] = model
         setSystemPrompt(for: mode)
-        if let query = query {
-            appendUserQueryToChatSession(query: query)
-        }
+        appendUserQueryToChatSession(query: query)
 
-        guard let historyPayload = try? JSONSerialization.data(withJSONObject: _payload) else {
-            completion("", "", AIError.internalError(message: "Internal error: Conversation history cannot be serialized"))
-            return
-        }
-
-        // Build request
-        let requestHeader = [
-            "Authorization": brilliantAPIKey,
-            "Content-Type": "multipart/form-data;boundary=\(boundary)"
-        ]
-        let service = audio != nil ? "audio_gpt" : "chat_gpt"
-        let url = URL(string: "https://api.brilliant.xyz/noa/\(service)")!
+        let jsonPayload = try? JSONSerialization.data(withJSONObject: payload)
+        let url = URL(string: "https://api.openai.com/v1/chat/completions")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.allHTTPHeaderFields = requestHeader
+        request.allHTTPHeaderFields = ["Authorization": "Bearer \(apiKey)", "Content-Type": "application/json"]
 
-        // Form data
-        var formData = Data()
+        prepareAndStartTask(with: request, jsonPayload: jsonPayload, completion: completion)
+    }
 
-        // Conversation history thus far using "json" field. If no audio, this must also contain
-        // the current user query.
-        formData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        formData.append("Content-Disposition:form-data;name=\"json\"\r\n".data(using: .utf8)!)
-        formData.append("Content-Type:application/json\r\n\r\n".data(using: .utf8)!)
-        formData.append(historyPayload)
-        formData.append("\r\n".data(using: .utf8)!)
+    // Helper function to prepare and start the URLSession task.
+    private func prepareAndStartTask(with request: URLRequest, jsonPayload: Data?, completion: @escaping (String, AIError?) -> Void) {
+        var request = request
+        request.httpBody = jsonPayload
 
-        // Audio data representing next user query
-        if let audio = audio {
-            formData.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-            formData.append("Content-Disposition:form-data;name=\"audio\";filename=\"audio.m4a\"\r\n".data(using: .utf8)!)  //TODO: temperature?
-            formData.append("Content-Type:audio/m4a\r\n\r\n".data(using: .utf8)!)
-            formData.append(audio)
-            formData.append("\r\n".data(using: .utf8)!)
-        }
-
-        // Terminate form data
-        formData.append("--\(boundary)--\r\n".data(using: .utf8)!)
-
-        // If this is a background task using a file, write that file, else attach to request
-        if let fileURL = _tempFileURL {
-            //TODO: error handling
-            try? formData.write(to: fileURL)
+        let task: URLSessionTask
+        if let fileURL = tempFileURL {
+            do {
+                try jsonPayload?.write(to: fileURL)
+                task = session.uploadTask(with: request, fromFile: fileURL)
+            } catch {
+                completion("", AIError.dataFormatError(message: "Error preparing data for upload: \(error.localizedDescription)")) // Use existing error type
+                return
+            }
         } else {
-            request.httpBody = formData
+            task = session.dataTask(with: request)
         }
 
-        // Create task
-        let task = _tempFileURL == nil ? _session.dataTask(with: request) : _session.uploadTask(with: request, fromFile: _tempFileURL!)
-
-        // Associate completion handler with this task
-        _completionByTask[task.taskIdentifier] = CompletionData(completion: completion, wasAudioPrompt: true)
-
-        // Begin
+        completionByTask[task.taskIdentifier] = completion
         task.resume()
     }
 
+    // Set the system prompt based on the selected mode.
     private func setSystemPrompt(for mode: Mode) {
-        if var messages = _payload["messages"] as? [[String: String]],
+        if var messages = payload["messages"] as? [[String: String]],
            messages.count >= 1 {
-            messages[0]["content"] = mode == .assistant ? Self._assistantPrompt : Self._translatorPrompt
-            _payload["messages"] = messages
+            messages[0]["content"] = mode == .assistant ? Self.assistantPrompt : Self.translatorPrompt
+            payload["messages"] = messages
         }
     }
 
+    // Append the user's query to the chat session.
     private func appendUserQueryToChatSession(query: String) {
-        if var messages = _payload["messages"] as? [[String: String]] {
-            // Append user prompts to maintain some sort of state. Note that we do not send back the agent responses because
-            // they won't add much.
+        if var messages = payload["messages"] as? [[String: String]] {
             messages.append([ "role": "user", "content": "\(query)" ])
-            _payload["messages"] = messages
+            payload["messages"] = messages
         }
     }
 
+    // Append the AI's response to the chat session.
     private func appendAIResponseToChatSession(response: String) {
-        if var messages = _payload["messages"] as? [[String: String]] {
+        if var messages = payload["messages"] as? [[String: String]] {
             messages.append([ "role": "assistant", "content": "\(response)" ])
-            _payload["messages"] = messages
+            payload["messages"] = messages
         }
     }
 
-    private func printConversation() {
-        // Debug log conversation history
-        print("---")
-        for message in (_payload["messages"] as! [[String: String]]) {
-            print("  role=\(message["role"]!), content=\(message["content"]!)")
-        }
-        print("---")
-    }
-
-    private func extractContent(from data: Data) -> (Any?, AIError?, String?, String?) {
+    // Extract content from the received data with improved error handling.
+    private func extractContent(from data: Data) -> (Any?, AIError?, String?) {
         do {
             let jsonString = String(decoding: data, as: UTF8.self)
-            if jsonString.count > 0 {
-                print("[AIAssistant] Response payload: \(jsonString)")
-            }
+            print("[AIAssistant] Response payload: \(jsonString)")
+
             let json = try JSONSerialization.jsonObject(with: data, options: [])
             if let response = json as? [String: AnyObject] {
-                if let errorMessage = response["message"] as? String {
-                   return (json, AIError.apiError(message: "Error from service: \(errorMessage)"), nil, nil)
+                if let errorPayload = response["error"] as? [String: AnyObject],
+                   let errorMessage = errorPayload["message"] as? String {
+                    return (json, AIError.apiError(message: errorMessage), nil)
                 } else if let choices = response["choices"] as? [AnyObject],
-                          choices.count > 0,
-                          let first = choices[0] as? [String: AnyObject],
+                          let first = choices.first as? [String: AnyObject],
                           let message = first["message"] as? [String: AnyObject],
-                          let assistantResponse = message["content"] as? String,
-                          let userQuery = response["prompt"] as? String {
-                    return (json, nil, userQuery, assistantResponse)
+                          let content = message["content"] as? String {
+                    return (json, nil, content)
                 }
             }
-            print("[AIAssistant] Error: Unable to parse response")
         } catch {
             print("[AIAssistant] Error: Unable to deserialize response: \(error)")
+            return (nil, AIError.responsePayloadParseError, nil)
         }
-        return (nil, AIError.responsePayloadParseError, nil, nil)
+        return (nil, AIError.apiError(message: "Unknown error occurred"), nil) // Use existing error type
     }
 
+    // Extract total tokens used from the JSON response.
     private func extractTotalTokensUsed(from json: Any?) -> Int {
-        if let json = json,
-           let response = json as? [String: AnyObject],
-           let usage = response["usage"] as? [String: AnyObject],
+        if let json = json as? [String: AnyObject],
+           let usage = json["usage"] as? [String: AnyObject],
            let totalTokens = usage["total_tokens"] as? Int {
             return totalTokens
         }
@@ -237,10 +188,10 @@ extension AIAssistant: URLSessionDelegate {
         // Deliver error for all outstanding tasks
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            for (_, completionData) in self._completionByTask {
-                completionData.completion("", "", AIError.clientSideNetworkError(error: error))
+            for (_, completion) in completionByTask {
+                completion("", AIError.clientSideNetworkError(error: error))
             }
-            _completionByTask = [:]
+            completionByTask = [:]
         }
     }
 
@@ -279,9 +230,9 @@ extension AIAssistant: URLSessionDataDelegate {
             // Deliver error
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                if let completionData = self._completionByTask[task.taskIdentifier] {
-                    completionData.completion("", "", AIError.urlAuthenticationFailed)
-                    self._completionByTask.removeValue(forKey: task.taskIdentifier)
+                if let completion = self.completionByTask[task.taskIdentifier] {
+                    completion("", AIError.urlAuthenticationFailed)
+                    self.completionByTask.removeValue(forKey: task.taskIdentifier)
                 }
             }
         }
@@ -296,14 +247,14 @@ extension AIAssistant: URLSessionDataDelegate {
         }
 
         // New task
-        let newTask = self._session.dataTask(with: request)
+        let newTask = self.session.dataTask(with: request)
 
         // Replace completion
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            if let completion = self._completionByTask[task.taskIdentifier] {
-                self._completionByTask.removeValue(forKey: task.taskIdentifier) // out with the old
-                self._completionByTask[newTask.taskIdentifier] = completion     // in with the new
+            if let completion = self.completionByTask[task.taskIdentifier] {
+                self.completionByTask.removeValue(forKey: task.taskIdentifier) // out with the old
+                self.completionByTask[newTask.taskIdentifier] = completion     // in with the new
             }
         }
 
@@ -324,9 +275,9 @@ extension AIAssistant: URLSessionDataDelegate {
         // error or I am interpreting the task lifecycle incorrectly.
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            if let completionData = self._completionByTask[task.taskIdentifier] {
-                completionData.completion("", "", AIError.clientSideNetworkError(error: error))
-                self._completionByTask.removeValue(forKey: task.taskIdentifier)
+            if let completion = self.completionByTask[task.taskIdentifier] {
+                completion("", AIError.clientSideNetworkError(error: error))
+                self.completionByTask.removeValue(forKey: task.taskIdentifier)
             }
         }
     }
@@ -344,39 +295,27 @@ extension AIAssistant: URLSessionDataDelegate {
     }
 
     public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        let (json, contentError, userPrompt, response) = extractContent(from: data)
-        let userPromptString = userPrompt ?? ""
+        let (json, contentError, response) = extractContent(from: data)
         let responseString = response ?? "" // if response is nill, contentError will be set
         let totalTokensUsed = extractTotalTokensUsed(from: json)
 
         // Deliver response and append to chat session
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            guard let completionData = self._completionByTask[dataTask.taskIdentifier] else { return }
 
             // Append to chat session to maintain running dialog unless we've exceeded the context
             // window
-            if totalTokensUsed >= Self._maxTokens {
+            if totalTokensUsed >= AIAssistant.maxTokens {
                 clearHistory()
                 print("[AIAssistant] Cleared context history because total tokens used reached \(totalTokensUsed)")
-            } else {
-                // Append the user prompt when in audio mode because we don't know the prompt until
-                // we get the full response back
-                if userPromptString.count > 0 && completionData.wasAudioPrompt {
-                    appendUserQueryToChatSession(query: userPromptString)
-                }
-
-                // And also the response
-                if let response = response {
-                    appendAIResponseToChatSession(response: response)
-                }
+            } else if let response = response {
+                appendAIResponseToChatSession(response: response)
             }
 
             // Deliver response
-            if let completionData = self._completionByTask[dataTask.taskIdentifier] {
-                // User prompt delivered in
-                completionData.completion(userPromptString, responseString, contentError)
-                self._completionByTask.removeValue(forKey: dataTask.taskIdentifier)
+            if let completion = self.completionByTask[dataTask.taskIdentifier] {
+                completion(responseString, contentError)
+                self.completionByTask.removeValue(forKey: dataTask.taskIdentifier)
             } else {
                 print("[AIAssistant]: Error: No completion found for task \(dataTask.taskIdentifier)")
             }
