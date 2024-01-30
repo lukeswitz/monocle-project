@@ -29,3 +29,5 @@ tmp/
 
 # MacOS
 .DS_Store
+
+ios/Noa/Noa.xcodeproj/xcshareddata/xcschemes/
