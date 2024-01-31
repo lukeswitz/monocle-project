@@ -158,7 +158,7 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
     private let _m4aWriter = M4AWriter()
     private let _whisper = Whisper(configuration: .backgroundData)
     private let _chatGPT = ChatGPT(configuration: .backgroundData)
-    private let _stableDiffusion = StableDiffusion(configuration: .backgroundData)
+    private let _dallE = DallE(configuration: .backgroundData)
 
     private var _pendingQueryByID: [UUID: String] = [:]
 
@@ -1066,32 +1066,31 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
             printErrorToChat("Photo could not be decoded", as: .user)
             return
         }
-
         // Display image as user
         printToChat(prompt, picture: picture, as: .user)
 
-        // Submit to Stable Diffusion
-        printTypingIndicatorToChat(as: .assistant)
-        _stableDiffusion.imageToImage(
-            image: picture,
-            prompt: prompt,
-            model: _settings.stableDiffusionModel,
-            strength: _settings.imageStrength,
-            guidance: _settings.imageGuidance,
-            apiKey: _settings.stabilityAIKey
-        ) { [weak self] (image: UIImage?, error: AIError?) in
-            if let error = error {
-                self?.printErrorToChat(error.description, as: .assistant)
-            } else if let picture = image?.centerCropped(to: CGSize(width: 640, height: 400)) { // crop out the letterboxing we had to introduce and return to original size
-                self?.printToChat(prompt, picture: picture, as: .assistant)
-
-                //TODO: this does not seem to work yet
-                //self?.sendImageToMonocleInChunks(image: picture)
-            } else {
-                // No picture but also no explicit error
-                self?.printErrorToChat("No image received", as: .assistant)
-            }
-        }
+//        // Submit to Stable Diffusion
+//        printTypingIndicatorToChat(as: .assistant)
+//        _stableDiffusion.imageToImage(
+//            image: picture,
+//            prompt: prompt,
+//            model: _settings.stableDiffusionModel,
+//            strength: _settings.imageStrength,
+//            guidance: _settings.imageGuidance,
+//            apiKey: _settings.stabilityAIKey
+//        ) { [weak self] (image: UIImage?, error: AIError?) in
+//            if let error = error {
+//                self?.printErrorToChat(error.description, as: .assistant)
+//            } else if let picture = image?.centerCropped(to: CGSize(width: 640, height: 400)) { // crop out the letterboxing we had to introduce and return to original size
+//                self?.printToChat(prompt, picture: picture, as: .assistant)
+//
+//                //TODO: this does not seem to work yet
+//                //self?.sendImageToMonocleInChunks(image: picture)
+//            } else {
+//                // No picture but also no explicit error
+//                self?.printErrorToChat("No image received", as: .assistant)
+//            }
+//        }
     }
 
     // MARK: Result Output

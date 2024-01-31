@@ -22,7 +22,6 @@
 		CC200A512A37E396005C67E0 /* graphics.py in Resources */ = {isa = PBXBuildFile; fileRef = CC200A4F2A37E396005C67E0 /* graphics.py */; };
 		CC200A552A3D589D005C67E0 /* StreamingStringMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC200A542A3D589D005C67E0 /* StreamingStringMatcher.swift */; };
 		CC202CC02A9036C400A71EE4 /* TimestampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC202CBF2A9036C400A71EE4 /* TimestampView.swift */; };
-		CC212D682A9D34A90093479F /* StableDiffusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC212D672A9D34A90093479F /* StableDiffusion.swift */; };
 		CC212D6A2A9D6FDB0093479F /* CVPixelBuffer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC212D692A9D6FDB0093479F /* CVPixelBuffer+Extensions.swift */; };
 		CC212D6E2A9E6F130093479F /* monocle-fpga.bin in Resources */ = {isa = PBXBuildFile; fileRef = CC212D6D2A9E6F130093479F /* monocle-fpga.bin */; };
 		CC212D702A9E74870093479F /* audio.py in Resources */ = {isa = PBXBuildFile; fileRef = CC212D6F2A9E74870093479F /* audio.py */; };
@@ -110,7 +109,6 @@
 		CC200A4F2A37E396005C67E0 /* graphics.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = graphics.py; sourceTree = "<group>"; };
 		CC200A542A3D589D005C67E0 /* StreamingStringMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingStringMatcher.swift; sourceTree = "<group>"; };
 		CC202CBF2A9036C400A71EE4 /* TimestampView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampView.swift; sourceTree = "<group>"; };
-		CC212D672A9D34A90093479F /* StableDiffusion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StableDiffusion.swift; sourceTree = "<group>"; };
 		CC212D692A9D6FDB0093479F /* CVPixelBuffer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+Extensions.swift"; sourceTree = "<group>"; };
 		CC212D6D2A9E6F130093479F /* monocle-fpga.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "monocle-fpga.bin"; sourceTree = "<group>"; };
 		CC212D6F2A9E74870093479F /* audio.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = audio.py; sourceTree = "<group>"; };
@@ -312,7 +310,6 @@
 				CC6851592A9933F8004EA777 /* DallE.swift */,
 				CCCECE6A2A1EB4B100DBB7CA /* Whisper.swift */,
 				CCCECE6C2A1EE7C700DBB7CA /* AIError.swift */,
-				CC212D672A9D34A90093479F /* StableDiffusion.swift */,
 			);
 			path = AI;
 			sourceTree = "<group>";
@@ -635,7 +632,6 @@
 				CC0039A12A6DA51A009E3BAC /* PopupDeviceView.swift in Sources */,
 				CC4E3AF72A01AA350058AC20 /* ChatView.swift in Sources */,
 				CC202CC02A9036C400A71EE4 /* TimestampView.swift in Sources */,
-				CC212D682A9D34A90093479F /* StableDiffusion.swift in Sources */,
 				CC3FE01F2A0DF21700756941 /* AppDelegate.swift in Sources */,
 				CC3FE0212A0DF25100756941 /* SceneDelegate.swift in Sources */,
 				CCF9DA832A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift in Sources */,
@@ -805,14 +801,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 4.1;
 				DEVELOPMENT_ASSET_PATHS = "\"Noa/Preview Content\"";
-				DEVELOPMENT_TEAM = 7T2874S592;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = A64B5QV548;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Noa-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Noa;
+				INFOPLIST_KEY_CFBundleDisplayName = ThirdEye;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connection to your Monocle device.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Transcribe voice queries from Monocle.";
@@ -824,12 +823,15 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.brilliant.argpt;
+				MARKETING_VERSION = 4.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.thirdeye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = tracks24;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -841,14 +843,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 4.1;
 				DEVELOPMENT_ASSET_PATHS = "\"Noa/Preview Content\"";
-				DEVELOPMENT_TEAM = 7T2874S592;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = A64B5QV548;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Noa-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Noa;
+				INFOPLIST_KEY_CFBundleDisplayName = ThirdEye;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connection to your Monocle device.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Transcribe voice queries from Monocle.";
@@ -860,12 +865,15 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.brilliant.argpt;
+				MARKETING_VERSION = 4.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.thirdeye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = tracks24;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -877,20 +885,25 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TWKJ9RPH32;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = A64B5QV548;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.brilliant.argpttests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.thirdeye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = tracks24;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Noa.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Noa";
 			};
 			name = Debug;
@@ -900,20 +913,25 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TWKJ9RPH32;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = A64B5QV548;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.brilliant.argpttests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.thirdeye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = tracks24;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Noa.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Noa";
 			};
 			name = Release;
@@ -924,17 +942,18 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TWKJ9RPH32;
+				DEVELOPMENT_TEAM = A64B5QV548;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.brilliant.argptuitests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.thirdeye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = arGPT;
 			};
 			name = Debug;
@@ -945,17 +964,18 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TWKJ9RPH32;
+				DEVELOPMENT_TEAM = A64B5QV548;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = xyz.brilliant.argptuitests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.thirdeye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = arGPT;
 			};
 			name = Release;

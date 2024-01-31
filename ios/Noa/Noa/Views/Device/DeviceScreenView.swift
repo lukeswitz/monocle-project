@@ -35,37 +35,42 @@ struct DeviceScreenView: View {
     
     var body: some View {
         ZStack {
-            colorScheme == .dark ? Color(red: 28/255, green: 28/255, blue: 30/255).edgesIgnoringSafeArea(.all) : Color(red: 242/255, green: 242/255, blue: 247/255).edgesIgnoringSafeArea(.all)
+            colorScheme == .dark ? Color(red: 28/255, green: 28/255, blue: 30/255).edgesIgnoringSafeArea(.all) : Color(red: 255/255, green: 255/255, blue: 255/255).edgesIgnoringSafeArea(.all)
             VStack {
                 VStack {
-                    let light = Image("BrilliantLabsLogo")
+                    let light = Image("jx-owl")
                         .resizable()
-                    let dark = Image("BrilliantLabsLogo_Dark")
+                    let dark = Image("jx-smiley")
                         .resizable()
                     ColorModeAdaptiveImage(light: light, dark: dark)
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 12)
+                        .frame(width: 150, height: 150)
                         .padding(.top, 80)
                     
-                    Text("Noa")
-                        .font(.system(size: 32, weight: .bold))
+                    Text("third eye")
+                        .font(.system(size: 28, weight: .bold))
+                        .padding(.top, -7)
+                    Text("by jx&co")
+                        .font(.system(size: 18, weight: .bold))
                         .padding(.top, -7)
                     
                     Spacer()
                 
                     Text("Let’s set up your Monocle. Take it out of the case, and bring it close.")
-                        .font(.system(size: 15))
+                        .font(.system(size: 17))
                         .frame(width: 314, height: 60)
+                        .multilineTextAlignment(.center)
+                        
                     
                     Spacer()
 
-                    let privacyPolicyText = "Be sure to read our [Privacy Policy](https://brilliant.xyz/pages/privacy-policy) as well as [Terms and Conditions](https://brilliant.xyz/pages/terms-conditions) before using Noa."
+                    let privacyPolicyText = "Data may be collected by OpenAI."
                     Text(.init(privacyPolicyText))
-                        .font(.system(size: 10))
+                        .font(.system(size: 12))
                         .frame(width: 217)
                         .multilineTextAlignment(.center)
                         .accentColor(Color(red: 232/255, green: 46/255, blue: 135/255))
-                        .lineSpacing(10)
+                        .lineSpacing(5)
                 }
 
                 VStack {

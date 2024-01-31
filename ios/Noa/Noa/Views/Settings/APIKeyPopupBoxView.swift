@@ -14,16 +14,15 @@ struct APIKeyPopupBoxView: View {
     @EnvironmentObject private var _settings: Settings
 
     @State private var _openAIKey: String = ""
-    @State private var _stabilityAIKey: String = ""
 
     var body: some View {
         VStack {
-            Text("Enter API Keys")
+            Text("Enter API Key")
                 .font(.system(size: 20, weight: .semibold))
                 .padding(.top, 20)
                 .padding(.bottom, 2)
 
-            Text("Your [OpenAI key](https://platform.openai.com) is required. An optional [Stability AI key](https://platform.stability.ai) is needed for image generation.")
+            Text("Your [OpenAI key](https://platform.openai.com) is required.")
                 .font(.system(size: 15, weight: .regular))
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 5)
@@ -33,16 +32,10 @@ struct APIKeyPopupBoxView: View {
                 .background(Color.gray.opacity(0.2))
                 .padding(.horizontal)
 
-            TextField("Stability AI (Optional): sk-...", text: $_stabilityAIKey)
-                .padding(.all, 2)
-                .background(Color.gray.opacity(0.2))
-                .padding(.horizontal)
-
             Divider().background(Color.gray)
 
             Button(action: {
                 _settings.setOpenAIKey(_openAIKey)
-                _settings.setStabilityAIKey(_stabilityAIKey)
                 closeWithAnimation()
             }) {
                 Text("Done")
@@ -64,7 +57,6 @@ struct APIKeyPopupBoxView: View {
 
             // Fetch existing API key
             _openAIKey = _settings.openAIKey
-            _stabilityAIKey = _settings.stabilityAIKey
         }
     }
 

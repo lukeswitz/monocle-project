@@ -17,8 +17,8 @@ class State:
     class DetectSingleTap:
         pass
 
-    class DetectHold:
-        pass
+#    class DetectHold:
+#        pass
 
     class StartRecording:
         pass

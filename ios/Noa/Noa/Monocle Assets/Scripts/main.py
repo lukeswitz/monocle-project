@@ -65,7 +65,7 @@ while True:
     elif state.current_state == state.Welcome:
         if state.on_entry():
             gfx.append_response(
-                """Welcome to Noa for Monocle.\nStart the Noa iOS or Android app."""
+                """Welcome to Monocle.\nStart the ThirdEye app."""
             )
         if bluetooth.connected():
             state.after(5000, state.Connected)
@@ -83,16 +83,7 @@ while True:
 
     elif state.current_state == state.DetectSingleTap:
         if state.has_been() >= 250:
-            if touch.state(touch.EITHER): # still holding, try detect hold
-                state.after(0, state.DetectHold)
-            else:
-                state.after(0, state.StartRecording)
-
-    elif state.current_state == state.DetectHold:
-        if state.has_been() >= 1000 and touch.state(touch.EITHER):
-            state.after(0, state.CaptureImage)
-        elif not touch.state(touch.EITHER):
-            state.after(0, state.WaitForTap)
+            state.after(0, state.StartRecording)
 
     elif state.current_state == state.StartRecording:
         start_recording(state, gfx, bluetooth_send_message)
@@ -104,7 +95,7 @@ while True:
         state.current_state == state.WaitForPing
         or state.current_state == state.WaitForResponse
     ):
-        gfx.set_prompt("Waiting for openAI")
+        gfx.set_prompt("Waiting for OpenAI")
 
     elif state.current_state == state.AskToCancel:
         gfx.set_prompt("Cancel?")
