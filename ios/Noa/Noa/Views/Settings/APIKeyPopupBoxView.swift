@@ -18,7 +18,7 @@ struct APIKeyPopupBoxView: View {
 
     var body: some View {
         VStack {
-            Text("Enter API Keys")
+            Text("Enter API Key")
                 .font(.system(size: 20, weight: .semibold))
                 .padding(.top, 20)
                 .padding(.bottom, 2)

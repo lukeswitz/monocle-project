@@ -169,7 +169,7 @@ fileprivate struct ChatTitleBarView: View {
                 .frame(width: 70)
 
             // Title
-            Text("ask")
+            Text("third eye")
                 .font(.system(size: 22, weight: .bold))
                 .frame(maxWidth: .infinity)
 

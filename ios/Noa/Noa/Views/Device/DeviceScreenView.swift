@@ -47,7 +47,7 @@ struct DeviceScreenView: View {
                         .frame(width: 150, height: 150)
                         .padding(.top, 80)
                     
-                    Text("know")
+                    Text("third eye")
                         .font(.system(size: 28, weight: .bold))
                         .padding(.top, -7)
                     Text("by jx&co")
@@ -64,7 +64,7 @@ struct DeviceScreenView: View {
                     
                     Spacer()
 
-                    let privacyPolicyText = "Before understanding, one must know."
+                    let privacyPolicyText = "Data may be collected by OpenAI."
                     Text(.init(privacyPolicyText))
                         .font(.system(size: 12))
                         .frame(width: 217)
