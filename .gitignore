@@ -1,6 +1,15 @@
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+###############################################################################
+# Python
+###############################################################################
+
+__pycache__
+
+###############################################################################
+# Xcode
+###############################################################################
 
 ## User settings
 xcuserdata/
@@ -88,3 +97,21 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+## Xcode 8 and earlier
+*.xcscmblueprint
+*.xccheckout
+
+## API key file
+APIKey.swift
+
+###############################################################################
+# Misc.
+###############################################################################
+
+tmp/
+
+# Models
+*.bin
+
+# MacOS
+.DS_Store
