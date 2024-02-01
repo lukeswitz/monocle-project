@@ -50,7 +50,7 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     }
 
     /// RSSI threshold used for proximity-based auto-pairing. The relative signal strength must be greater than or equal to this value.
-    public var rssiThreshold: Float = -80
+    public var rssiThreshold: Float = -74
 
     public var maximumDataLength: Int? {
         return _connectedPeripheral?.maximumWriteValueLength(for: .withoutResponse)
