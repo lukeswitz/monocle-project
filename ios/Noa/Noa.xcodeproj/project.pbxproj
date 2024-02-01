@@ -39,7 +39,6 @@
 		CC3FE0322A0EF81A00756941 /* Question_Nutrition.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CC3FE02C2A0EF81A00756941 /* Question_Nutrition.m4a */; };
 		CC3FE0332A0EF81A00756941 /* Question_CPU.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CC3FE02D2A0EF81A00756941 /* Question_CPU.m4a */; };
 		CC3FE0362A0F12F700756941 /* ChatGPT.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3FE0352A0F12F700756941 /* ChatGPT.swift */; };
-		CC4E3AC82A00BA4C0058AC20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4E3AC72A00BA4C0058AC20 /* Assets.xcassets */; };
 		CC4E3ACB2A00BA4D0058AC20 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4E3ACA2A00BA4D0058AC20 /* Preview Assets.xcassets */; };
 		CC4E3AD52A00BA4D0058AC20 /* NoaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4E3AD42A00BA4D0058AC20 /* NoaTests.swift */; };
 		CC4E3ADF2A00BA4D0058AC20 /* NoaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4E3ADE2A00BA4D0058AC20 /* NoaUITests.swift */; };
@@ -73,6 +72,7 @@
 		CCF9DA812A5C9C46004C1EAE /* SettingsMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA802A5C9C46004C1EAE /* SettingsMenuView.swift */; };
 		CCF9DA832A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA822A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift */; };
 		CCF9DA852A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA842A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift */; };
+		EB1FBC312B6BFD3900D56D89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4E3AC72A00BA4C0058AC20 /* Assets.xcassets */; };
 		F8B8D4792A71761700817A24 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */; };
 		F8BC4DE52A4DBD680005F6F0 /* DeviceScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC4DE42A4DBD680005F6F0 /* DeviceScreenView.swift */; };
 /* End PBXBuildFile section */
@@ -581,9 +581,9 @@
 				CCCECE762A1EF36C00DBB7CA /* Question_Nutrition.wav in Resources */,
 				CCEE17562ACF8CC1000170F5 /* Tutorial_4.png in Resources */,
 				CCCECE772A1EF36C00DBB7CA /* Question_Tootsie.wav in Resources */,
-				CC4E3AC82A00BA4C0058AC20 /* Assets.xcassets in Resources */,
 				CCCECE742A1EF36C00DBB7CA /* Question_History.wav in Resources */,
 				CCEE17572ACF8CC1000170F5 /* Tutorial_3.png in Resources */,
+				EB1FBC312B6BFD3900D56D89 /* Assets.xcassets in Resources */,
 				CCCECE792A1EF36C00DBB7CA /* Question_Lizards.wav in Resources */,
 				CCCECE782A1EF36C00DBB7CA /* Question_CPU.wav in Resources */,
 			);
@@ -801,6 +801,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -843,6 +844,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;

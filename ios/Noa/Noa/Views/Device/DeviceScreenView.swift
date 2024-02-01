@@ -50,7 +50,7 @@ struct DeviceScreenView: View {
                     Text("third eye")
                         .font(.system(size: 28, weight: .bold))
                         .padding(.top, -7)
-                    Text("by jx&co")
+                    Text("jx&co x brilliant labs")
                         .font(.system(size: 18, weight: .bold))
                         .padding(.top, -7)
                     
@@ -64,7 +64,7 @@ struct DeviceScreenView: View {
                     
                     Spacer()
 
-                    let privacyPolicyText = "Data may be collected by OpenAI."
+                    let privacyPolicyText = "Data may be collected by OpenAI. Derived from open code. Not for sale."
                     Text(.init(privacyPolicyText))
                         .font(.system(size: 12))
                         .frame(width: 217)

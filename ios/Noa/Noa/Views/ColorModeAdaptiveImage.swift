@@ -19,6 +19,6 @@ struct ColorModeAdaptiveImage: View {
 
 struct ColorModeAdaptiveImage_Previews: PreviewProvider {
     static var previews: some View {
-        ColorModeAdaptiveImage(light: Image("BrilliantLabsLogo"), dark: Image("BrilliantLabsLogo_Dark"))
+        ColorModeAdaptiveImage(light: Image("jx-owl"), dark: Image("jx-smiley"))
     }
 }
