@@ -12,8 +12,8 @@ import SwiftUI
 struct TypingIndicatorView: View {
     @State private var _animatingDotIdx = 3
 
-    private let _dotSize: CGFloat = 10
-    private let _speed: Double = 0.3
+    private let _dotSize: CGFloat = 8
+    private let _speed: Double = 0.2
     private let _staticColor: Color
     private let _animatingColor: Color
 
@@ -28,7 +28,7 @@ struct TypingIndicatorView: View {
                 Capsule()
                     .foregroundColor((self._animatingDotIdx == i) ? self._animatingColor : self._staticColor)
                     .frame(width: self._dotSize, height: (self._animatingDotIdx == i) ? self._dotSize/3 : self._dotSize)
-                    .animation(Animation.spring(response: 0.5, dampingFraction: 0.7, blendDuration: 0.1).speed(2), value: _animatingDotIdx)
+                    .animation(Animation.spring(response: 0.9, dampingFraction: 0.7, blendDuration: 0.1).speed(2), value: _animatingDotIdx)
             }
         }
         .onAppear {
