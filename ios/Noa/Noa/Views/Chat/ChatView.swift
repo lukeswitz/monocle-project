@@ -198,7 +198,7 @@ fileprivate struct ChatTextFieldView: View {
             // Connection status
             VStack {
                 if !isMonocleConnected  {
-                    Text("Not Connected \(Image(systemName: "exclamationmark.circle"))")
+                    Text("Not Connected \(Image(systemName: "point.3.connected.trianglepath.dotted"))")
                         .foregroundColor(Color.red)
                         .padding(.bottom)
                 } else {

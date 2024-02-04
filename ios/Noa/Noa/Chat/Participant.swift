@@ -18,4 +18,5 @@ struct Participant: Equatable {
     public static let user = Participant(name: "Me", imageName: "MonocleIcon")
     public static let assistant = Participant(name: "Assistant", imageName: "ChatGPTIcon")
     public static let translator = Participant(name: "Translator", imageName: "ChatGPTIcon")
+    public static let transcriber = Participant(name: "Transcriber", imageName: "ChatGPTIcon")
 }

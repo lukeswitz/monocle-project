@@ -1008,6 +1008,7 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
                 printErrorToChat(error.description, as: .user)
             } else if _imageData.isEmpty {
                 // No image data: normal operation (assistant or translator)
+                print("MOde sending req: ", mode)
                 if mode == .assistant {
                     // Store query and send ID to Monocle. We need to do this because we cannot perform
                     // back-to-back network requests in background mode. Monocle will reply back with
@@ -1016,14 +1017,17 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
                     _pendingQueryByID[id] = query
                     send(text: "pin:" + id.uuidString, to: _monocleBluetooth, on: Self._dataRx)
                     print("[Controller] Sent transcription ID to Monocle: \(id)")
-                } else {
+                } else if mode == .transcriber {
+                    printToChat(query, as: .transcriber)
+                    print("[Controller] Transcription received: \(query)")
+                } else if mode == .translator{
                     // Translation mode: No more network requests to do. Display translation.
                     printToChat(query, as: .translator)
                     print("[Controller] Translation received: \(query)")
                 }
             } else {
                 // Have image data, perform image generation
-                generateImage(prompt: query)
+                //generateImage(prompt: query)
             }
         }
     }
@@ -1069,28 +1073,7 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
         // Display image as user
         printToChat(prompt, picture: picture, as: .user)
 
-//        // Submit to Stable Diffusion
-//        printTypingIndicatorToChat(as: .assistant)
-//        _stableDiffusion.imageToImage(
-//            image: picture,
-//            prompt: prompt,
-//            model: _settings.stableDiffusionModel,
-//            strength: _settings.imageStrength,
-//            guidance: _settings.imageGuidance,
-//            apiKey: _settings.stabilityAIKey
-//        ) { [weak self] (image: UIImage?, error: AIError?) in
-//            if let error = error {
-//                self?.printErrorToChat(error.description, as: .assistant)
-//            } else if let picture = image?.centerCropped(to: CGSize(width: 640, height: 400)) { // crop out the letterboxing we had to introduce and return to original size
-//                self?.printToChat(prompt, picture: picture, as: .assistant)
-//
-//                //TODO: this does not seem to work yet
-//                //self?.sendImageToMonocleInChunks(image: picture)
-//            } else {
-//                // No picture but also no explicit error
-//                self?.printErrorToChat("No image received", as: .assistant)
-//            }
-//        }
+//       
     }
 
     // MARK: Result Output

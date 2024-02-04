@@ -17,6 +17,7 @@ public class ChatGPT: NSObject {
     public enum Mode {
         case assistant
         case translator
+        case transcriber
     }
 
     private static let _maxTokens = 4000    // 4096 for gpt-3.5-turbo and larger for gpt-4, but we use a conservative number to avoid hitting that limit
