@@ -16,6 +16,7 @@ struct SettingsMenuView: View {
     @Binding var mode: ChatGPT.Mode
 
     @State private var _translateEnabled = false
+    @State private var _transcribeEnabled = false
 
     var body: some View {
         Menu {
@@ -29,6 +30,11 @@ struct SettingsMenuView: View {
 
             Toggle(isOn: $_translateEnabled) {
                 Label("Translate", systemImage: "globe")
+            }
+            .toggleStyle(.button)
+            
+            Toggle(isOn: $_transcribeEnabled) {
+                Label("Transcribe", systemImage: "hearingdevice.ear")
             }
             .toggleStyle(.button)
 
@@ -55,8 +61,23 @@ struct SettingsMenuView: View {
         .onAppear {
             _translateEnabled = mode == .translator
         }
-        .onChange(of: _translateEnabled) {
-            mode = $0 ? .translator : .assistant
+        .onChange(of: _translateEnabled) { newValue in
+            if newValue {
+                _transcribeEnabled = false // Disable transcribe when translate is enabled
+                mode = .translator
+            } else if !_transcribeEnabled {
+                mode = .assistant // If both are false, set mode to assistant
+            }
+            print("Mode: ", mode)
+        }
+        .onChange(of: _transcribeEnabled) { newValue in
+            if newValue {
+                _translateEnabled = false // Disable translate when transcribe is enabled
+                mode = .transcriber
+            } else if !_translateEnabled {
+                mode = .assistant // If both are false, set mode to assistant
+            }
+            print("Mode: ", mode)
         }
     }
 }
