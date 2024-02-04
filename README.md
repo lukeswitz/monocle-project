@@ -1,17 +1,14 @@
-# Noa for iOS: AI Chat for Monocle with iOS Devices
-*Copyright 2023 Brilliant Labs Ltd.*
+# Third3ye for iOS: AI Chat for Monocle
 
 ## Overview
 
 *Noa for iOS* is an application that pairs to your [Monocle](https://brilliant.xyz/products/monocle) and empowers you with access to ChatGPT anywhere you need it. Simply tap to speak a question and see the response appear in your field of view. The iOS application can also function as a standalone chat interface to ChatGPT, allowing queries to be entered via the iOS keyboard.
 
-![iOS screenshot](docs/iOS_Screenshot_1.jpg)
-
 ## Getting Started
 
 Getting started is easy:
 
-- [Install the iOS app](https://apps.apple.com/us/app/argpt/id6450499355).
+- Install the iOS app 
 - [Obtain an OpenAI API key](https://platform.openai.com/). Obtaining a new API key is straightforward from the account management page, shown below. If you have not already done so, you will need to register an OpenAI account and set up billing. For peace of mind, we recommend new users set very low usage limits (under *Billing* and *Usage Limits*). For example, a soft limit of $5 and a hard limit of $10 will be more than sufficient for casual users and is highly unlikely to be reached in a single month.
 
 ![OpenAI API Key](docs/OpenAI_Key.png)
