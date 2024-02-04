@@ -5,10 +5,10 @@ import states
 def start_recording(state, gfx, send_message):
     if state.on_entry():
         microphone.record(seconds=6.0, bit_depth=8, sample_rate=8000)
-        if state.previous_state == state.SendImage:
-            send_message(b"ien:") # continue image-and-prompt flow
-        else:
-            send_message(b"ast:") # *prompt only* (erases image data)
+#        if state.previous_state == state.SendImage:
+#            send_message(b"ien:") # continue image-and-prompt flow
+#        else:
+        send_message(b"ast:") # *prompt only* (erases image data)
         gfx.clear_response()
         gfx.set_prompt("Listening [     ]")
     state.after(1000, state.SendAudio)
