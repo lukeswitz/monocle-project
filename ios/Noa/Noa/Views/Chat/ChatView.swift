@@ -95,6 +95,7 @@ struct ChatView: View {
                 // Bottom bar: connection status and text entry
                 if _expandedPicture == nil {
                     ChatTextFieldView(
+                        mode: $_mode,
                         isMonocleConnected: $_isMonocleConnected,
                         textInput: $_textInput,
                         onTextSubmitted: _onTextSubmitted
@@ -189,6 +190,7 @@ fileprivate struct ChatTitleBarView: View {
 }
 
 fileprivate struct ChatTextFieldView: View {
+    @Binding var mode: ChatGPT.Mode
     @Binding var isMonocleConnected: Bool
     @Binding var textInput: String
     let onTextSubmitted: ((String) -> Void)?
@@ -202,7 +204,16 @@ fileprivate struct ChatTextFieldView: View {
                         .foregroundColor(Color.red)
                         .padding(.bottom)
                 } else {
-                    Text("")
+                    Group {
+                        switch mode {
+                        case .assistant:
+                            Text("Assistant").padding(.bottom).foregroundColor(Color.gray)
+                        case .translator:
+                            Text("Translator").padding(.bottom).foregroundColor(Color.gray)
+                        case .transcriber:
+                            Text("Speech to Text").padding(.bottom).foregroundColor(Color.gray)
+                        }
+                    }
                 }
             }
 
