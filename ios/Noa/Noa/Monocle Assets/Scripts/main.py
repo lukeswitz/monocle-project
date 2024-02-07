@@ -65,7 +65,7 @@ while True:
     elif state.current_state == state.Welcome:
         if state.on_entry():
             gfx.append_response(
-                """Welcome to Monocle.\nStart the ThirdEye app."""
+                """..:Monocle:..\nWaiting for iOS app..."""
             )
         if bluetooth.connected():
             state.after(5000, state.Connected)

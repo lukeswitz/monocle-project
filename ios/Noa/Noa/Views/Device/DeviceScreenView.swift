@@ -47,11 +47,11 @@ struct DeviceScreenView: View {
                         .frame(width: 150, height: 150)
                         .padding(.top, 80)
                     
-                    Text("third eye")
+                    Text("third3ye")
                         .font(.system(size: 28, weight: .bold))
                         .padding(.top, -7)
                     Text("jx&co x brilliant labs")
-                        .font(.system(size: 18, weight: .bold))
+                        .font(.system(size: 14, weight: .bold))
                         .padding(.top, -7)
                     
                     Spacer()
