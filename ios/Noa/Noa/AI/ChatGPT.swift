@@ -26,9 +26,9 @@ public class ChatGPT: NSObject {
     private var _completionByTask: [Int: (String, AIError?) -> Void] = [:]
     private var _tempFileURL: URL?
 
-    private static let _assistantPrompt = "You are a smart assistant that answers all user queries, questions, and statements with a single sentence. Be very faithful."
+    private static let _assistantPrompt = "You are a smart assistant that answers ALL user queries, questions, and statements with a single sentence. Be very faithful."
     private static let _translatorPrompt = "You are a smart assistant that translates user input to English. Translate as faithfully as you can and do not add any other commentary."
-    private static let _transcriberPrompt = "You are a smart assistant that translates speech to text.  Do not add any other commentary. Be very faithful and accurate."
+    private static let _transcriberPrompt = "You are a smart assistant that translates our speech to text. Do not add any other commentary. Be very accurate."
 
 
     private var _payload: [String: Any] = [
