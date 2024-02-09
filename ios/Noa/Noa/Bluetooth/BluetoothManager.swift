@@ -39,12 +39,9 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     /// auto-connecting by proximity.
     @Published public var selectedDeviceID: UUID? {
         didSet {
-            if let connectedPeripheral = _connectedPeripheral {
-                // We have a connected peripheral. See if desired device ID changed and if so,
-                // disconnect.
-                if selectedDeviceID != connectedPeripheral.identifier {
-                    _manager.cancelPeripheralConnection(connectedPeripheral)    // should cause disconnect event
-                }
+            guard oldValue != selectedDeviceID, let connectedPeripheral = _connectedPeripheral else { return }
+            if selectedDeviceID != connectedPeripheral.identifier {
+                _manager.cancelPeripheralConnection(connectedPeripheral)
             }
         }
     }
@@ -226,36 +223,37 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     }
 
     private func updateDiscoveredPeripherals(with peripheral: CBPeripheral? = nil, rssi: Float = -.infinity) {
-        let numPeripheralsBefore = _discoveredPeripherals.count
-        var didChange = false
+        // Record the initial number of peripherals for change detection
+        let initialCount = _discoveredPeripherals.count
 
-        // Delete anything that has timed out
-        let now = Date.timeIntervalSinceReferenceDate
-        _discoveredPeripherals.removeAll { $0.timeout >= now }
-        if numPeripheralsBefore != _discoveredPeripherals.count {
-            didChange = true
+        // Calculate the current time once to avoid multiple Date() instantiations
+        let currentTime = Date.timeIntervalSinceReferenceDate
+
+        // Remove peripherals that have timed out
+        _discoveredPeripherals.removeAll { $0.timeout < currentTime }
+
+        // Check if the list has changed after removal
+        var listChanged = initialCount != _discoveredPeripherals.count
+
+        if let peripheral = peripheral, !_discoveredPeripherals.contains(where: { $0.peripheral == peripheral }) {
+            // Add the new peripheral if it's not already in the list, ensuring no duplicates
+            _discoveredPeripherals.append((peripheral: peripheral, rssi: rssi, timeout: currentTime + 10))
+            listChanged = true
         }
 
-        // If we are adding a peripheral, remove dupes first
-        if let peripheral = peripheral {
-            _discoveredPeripherals.removeAll { $0.peripheral.isEqual(peripheral) }
-            _discoveredPeripherals.append((peripheral: peripheral, rssi: rssi, timeout: now + 10))  // timeout after 10 seconds
-            didChange = true
-        }
+        if listChanged {
+            // Sort and publish the updated list if there was a change
+            let devices = _discoveredPeripherals.sorted(by: { $0.rssi > $1.rssi }).map { (deviceID: $0.peripheral.identifier, rssi: $0.rssi) }
+            discoveredDevices.send(devices)
 
-        // Update device list and log it
-        // Publish sorted in descending order by RSSI
-        let devices = _discoveredPeripherals
-            .map { (deviceID: $0.peripheral.identifier, rssi: $0.rssi) }
-            .sorted { $0 .rssi < $1.rssi }
-        discoveredDevices.send(devices)
-        if didChange {
-            print("[BluetoothManager] Discovered peripherals:")
-            for (peripheral, rssi, _) in _discoveredPeripherals {
-                print("[BluetoothManager]   name=\(peripheral.name ?? "<no name>") id=\(peripheral.identifier) rssi=\(rssi)")
+            // Log the updated list of discovered peripherals
+            print("[BluetoothManager] Updated list of discovered peripherals:")
+            for device in devices {
+                print("[BluetoothManager]   name=\(device.deviceID) rssi=\(device.rssi)")
             }
         }
     }
+
 
     private func printServices() {
         guard let peripheral = _connectedPeripheral else { return }
@@ -339,31 +337,17 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     // MARK: CBCentralManagerDelegate
 
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        let stateDescription: String
         switch central.state {
-        case .poweredOn:
-            if enabled {
-                startScan()
-            }
-        case .poweredOff:
-            // Alert user to turn on Bluetooth
-            print("[BluetoothManager] Bluetooth is powered off")
-            break
-        case .resetting:
-            // Wait for next state update and consider logging interruption of Bluetooth service
-            break
-        case .unauthorized:
-            // Alert user to enable Bluetooth permission in app Settings
-            print("[BluetoothManager] Authorization missing!")
-            break
-        case .unsupported:
-            // Alert user their device does not support Bluetooth and app will not work as expected
-            print("[BluetoothManager] Bluetooth not supported on this device!")
-            break
-        case .unknown:
-           // Wait for next state update
-            break
-        default:
-            break
+        case .poweredOn: stateDescription = "Bluetooth is powered on and ready."
+        case .poweredOff: stateDescription = "Bluetooth is powered off."
+        case .unauthorized: stateDescription = "Bluetooth authorization has been denied."
+        case .unsupported: stateDescription = "Bluetooth is not supported on this device."
+        default: stateDescription = "Bluetooth state is unknown or resetting."
+        }
+        print("[BluetoothManager] \(stateDescription)")
+        if central.state == .poweredOn && _enabled {
+            startScan()
         }
     }
 
