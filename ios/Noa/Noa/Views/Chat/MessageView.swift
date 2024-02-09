@@ -29,19 +29,19 @@ struct MessageView: View {
                             _expandedPicture = picture
                         }
 
-                    if _currentMessage.participant != .user {
+                    if _currentMessage.participant != .user && _currentMessage.participant != .transcriber {
                         Spacer()
                     }
                 }
             }
             if _currentMessage.text.count > 0 || _currentMessage.typingInProgress {
                 HStack(alignment: .bottom, spacing: 15) {
-                    if _currentMessage.participant != .assistant {
+                    if _currentMessage.participant != .assistant && _currentMessage.participant != .transcriber {
                         // User bubble pushed all the way to right, translator will be centered
                         Spacer()
                     }
                     MessageContentView(message: _currentMessage)
-                    if _currentMessage.participant != .user {
+                    if _currentMessage.participant != .user && _currentMessage.participant != .transcriber{
                         Spacer()
                     }
                 }

@@ -73,7 +73,7 @@ class Graphics:
                 )
 
             text_objects = []
-            response_color = display.RED if self.error_flag else display.WHITE
+            response_color = display.RED if self.error_flag else display.BLUE
 
             for line in range(self.MAX_LINES):
                 if len(response_lines) > line:

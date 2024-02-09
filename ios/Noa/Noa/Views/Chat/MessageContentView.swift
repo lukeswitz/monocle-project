@@ -25,6 +25,8 @@ struct MessageContentView: View {
 
         if _message.participant == .translator {
             return Color(red: 89/255, green: 93/255, blue: 177/255)
+        } else if _message.participant == .transcriber {
+            return Color(red: 0/255, green: 122/255, blue: 255/255) // appl3 blue
         }
 
         if colorScheme == .dark {
@@ -46,6 +48,8 @@ struct MessageContentView: View {
         switch _message.participant {
         case .assistant:
             return .left
+        case .transcriber:
+            return .right
         case .user:
             return .right
         default:
