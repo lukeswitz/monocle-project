@@ -75,6 +75,7 @@
 		EB1FBC312B6BFD3900D56D89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4E3AC72A00BA4C0058AC20 /* Assets.xcassets */; };
 		EB1FBC332B6C00C600D56D89 /* WhisperSTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1FBC322B6C00C600D56D89 /* WhisperSTT.swift */; };
 		EB3299A92B6ED90700BDA3F9 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3299A82B6ED90700BDA3F9 /* OpenAIService.swift */; };
+		EBFAC9282B76E72100EDC23F /* Tutorial_3_alt.png in Resources */ = {isa = PBXBuildFile; fileRef = EBFAC9272B76E72100EDC23F /* Tutorial_3_alt.png */; };
 		F8B8D4792A71761700817A24 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */; };
 		F8BC4DE52A4DBD680005F6F0 /* DeviceScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC4DE42A4DBD680005F6F0 /* DeviceScreenView.swift */; };
 /* End PBXBuildFile section */
@@ -168,6 +169,7 @@
 		CCF9DA842A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModeAdaptiveImage.swift; sourceTree = "<group>"; };
 		EB1FBC322B6C00C600D56D89 /* WhisperSTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperSTT.swift; sourceTree = "<group>"; };
 		EB3299A82B6ED90700BDA3F9 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
+		EBFAC9272B76E72100EDC23F /* Tutorial_3_alt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Tutorial_3_alt.png; path = ../../../../../../Desktop/Tutorial_3_alt.png; sourceTree = "<group>"; };
 		F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
 		F8BC4DE42A4DBD680005F6F0 /* DeviceScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -203,6 +205,7 @@
 			children = (
 				352D27F72A7B01820019EFDB /* SpinningMonocle.mp4 */,
 				CCEE17502ACF8CC1000170F5 /* Tutorial_2.png */,
+				EBFAC9272B76E72100EDC23F /* Tutorial_3_alt.png */,
 				CCEE17532ACF8CC1000170F5 /* Tutorial_3.png */,
 				CCEE17522ACF8CC1000170F5 /* Tutorial_4.png */,
 				CCEE17512ACF8CC1000170F5 /* Tutorial_5.png */,
@@ -572,6 +575,7 @@
 				CC6851682A9964C2004EA777 /* Tahoe.jpg in Resources */,
 				CC3FE00B2A09C0BF00756941 /* Settings.bundle in Resources */,
 				CC03F4912A8301E6006E9353 /* Statement_Chinese.m4a in Resources */,
+				EBFAC9282B76E72100EDC23F /* Tutorial_3_alt.png in Resources */,
 				CC212D6E2A9E6F130093479F /* monocle-fpga.bin in Resources */,
 				CC212D702A9E74870093479F /* audio.py in Resources */,
 				CC3FE0302A0EF81A00756941 /* Question_Lizards.m4a in Resources */,
