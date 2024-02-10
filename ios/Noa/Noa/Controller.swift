@@ -426,9 +426,13 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
     /// Submit a query from the iOS app directly.
     /// - Parameter query: Query string.
     public func submitQuery(query: String) {
-        let fakeID = UUID()
-        print("[Controller] Sending iOS query with transcription ID \(fakeID) to ChatGPT: \(query)")
-        submitQuery(query: query, transcriptionID: fakeID)
+        if mode != .transcriber {
+            let fakeID = UUID()
+            print("[Controller] Sending iOS query with transcription ID \(fakeID) to ChatGPT: \(query)")
+            submitQuery(query: query, transcriptionID: fakeID)
+        } else {
+            print("[Controller] Sending iOS query to Apple Speech: ", query)
+        }
     }
 
     /// Clear chat history, including ChatGPT context window.
@@ -591,7 +595,7 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
         }
 
         let command = String(decoding: receivedValue[0..<4], as: UTF8.self)
-        print("[Controller] Data command from Monocle: \(command)")
+       // print("[Controller] Data command from Monocle: \(command)")
 
         onMonocleCommand(command: command, data: receivedValue[4...])
     }
@@ -950,7 +954,7 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
             _imageData.removeAll(keepingCapacity: true)
         } else if command.starts(with: "dat:") {
             // Append audio data
-            print("[Controller] Received audio data packet (\(data.count) bytes)")
+          //  print("[Controller] Received audio data packet (\(data.count) bytes)")
             _audioData.append(data)
         } else if command.starts(with: "idt:") {
             // Append image data
@@ -1018,8 +1022,8 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
                     send(text: "pin:" + id.uuidString, to: _monocleBluetooth, on: Self._dataRx)
                     print("[Controller] Sent transcription ID to Monocle: \(id)")
                 } else if mode == .transcriber {
-                    printToChat(query, as: .transcriber)
-                    print("[Controller] Transcription received: \(query)")
+                    handleLocalTranscription(query: query)
+                    print("[Controller] In transcriber mode, handling locally.")
                 } else if mode == .translator{
                     // Translation mode: No more network requests to do. Display translation.
                     printToChat(query, as: .translator)
@@ -1048,17 +1052,37 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
         // User message
         printToChat(query, as: .user)
 
-        // Send to ChatGPT
-        let responder = mode == .assistant ? Participant.assistant : Participant.translator
-        printTypingIndicatorToChat(as: responder)
-        _chatGPT.send(mode: mode, query: query, apiKey: _settings.openAIKey, model: _settings.gptModel) { [weak self] (response: String, error: AIError?) in
-            if let error = error {
-                self?.printErrorToChat(error.description, as: responder)
-            } else {
-                self?.printToChat(response, as: responder)
-                print("[Controller] Received response from ChatGPT for \(id): \(response)")
+        switch mode {
+        case .assistant, .translator:
+            // Define the responder based on the current mode
+            let responder = mode == .assistant ? Participant.assistant : Participant.translator
+            
+            // Show typing indicator in chat
+            printTypingIndicatorToChat(as: responder)
+            
+            // Send to ChatGPT
+            _chatGPT.send(mode: mode, query: query, apiKey: _settings.openAIKey, model: _settings.gptModel) { [weak self] (response: String, error: AIError?) in
+                guard let self = self else { return }
+                
+                // Check for errors
+                if let error = error {
+                    self.printErrorToChat(error.description, as: responder)
+                } else {
+                    // Print ChatGPT's response to chat
+                    self.printToChat(response, as: responder)
+                    print("[Controller] Received response from ChatGPT for \(id): \(response)")
+                }
             }
+        case .transcriber:
+            // In transcriber mode, handle the transcription locally without making a ChatGPT request
+            print("[Controller] Transcription handled locally for \(id): \(query)")
         }
+    }
+
+    
+    private func handleLocalTranscription(query: String) {
+        // Directly print the query as transcription result in transcriber mode
+        printToChat(query, as: .transcriber)
     }
 
     private func generateImage(prompt: String) {

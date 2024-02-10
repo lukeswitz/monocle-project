@@ -233,8 +233,9 @@ fileprivate struct ChatTextFieldView: View {
                     action: {
                         if let onTextSubmitted = onTextSubmitted {
                             onTextSubmitted(textInput)
+                            textInput = ""
                         }
-                        textInput = "" // Clear the text input after sending the message
+                        
                     },
                     label: {
                         Image(systemName: "arrow.up.circle.fill")
