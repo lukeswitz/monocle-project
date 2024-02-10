@@ -6,7 +6,7 @@ import re
 class Graphics:
     def __init__(self):
         self.MAX_LINES = 7
-        self.WORD_SPEED = 300
+        self.WORD_SPEED = 200
         self.FRAME_RATE = 20
         self.error_flag = False
         self.done_printing = False
@@ -73,7 +73,7 @@ class Graphics:
                 )
 
             text_objects = []
-            response_color = display.RED if self.error_flag else display.BLUE
+            response_color = display.RED if self.error_flag else display.WHITE
 
             for line in range(self.MAX_LINES):
                 if len(response_lines) > line:

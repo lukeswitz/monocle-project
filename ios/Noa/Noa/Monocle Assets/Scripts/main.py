@@ -95,7 +95,7 @@ while True:
         state.current_state == state.WaitForPing
         or state.current_state == state.WaitForResponse
     ):
-        gfx.set_prompt("Waiting for OpenAI")
+        gfx.set_prompt("Waiting for Response")
 
     elif state.current_state == state.AskToCancel:
         gfx.set_prompt("Cancel?")

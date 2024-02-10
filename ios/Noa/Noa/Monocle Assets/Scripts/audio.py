@@ -15,7 +15,7 @@ def start_recording(state, gfx, send_message):
 
 def send_audio(state, gfx, send_message):
     if state.has_been() > 5000:
-        gfx.set_prompt("Waiting for OpenAI")
+        gfx.set_prompt("Waiting for Response")
     elif state.has_been() > 4000:
         gfx.set_prompt("Listening [=====]")
     elif state.has_been() > 3000:
