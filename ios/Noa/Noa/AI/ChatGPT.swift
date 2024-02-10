@@ -32,7 +32,7 @@ public class ChatGPT: NSObject {
 
 
     private var _payload: [String: Any] = [
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-3.5-turbo-0125",
         "messages": [
             [
                 "role": "system",

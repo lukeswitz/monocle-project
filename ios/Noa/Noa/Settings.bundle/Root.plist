@@ -38,7 +38,7 @@
 			<key>Key</key>
 			<string>model</string>
 			<key>DefaultValue</key>
-			<string>gpt-3.5-turbo</string>
+			<string>gpt-3.5-turbo-0125</string>
 			<key>Titles</key>
 			<array>
 				<string>GPT-3.5 Turbo</string>

@@ -68,14 +68,13 @@
 		CCEE17542ACF8CC1000170F5 /* Tutorial_2.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEE17502ACF8CC1000170F5 /* Tutorial_2.png */; };
 		CCEE17552ACF8CC1000170F5 /* Tutorial_5.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEE17512ACF8CC1000170F5 /* Tutorial_5.png */; };
 		CCEE17562ACF8CC1000170F5 /* Tutorial_4.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEE17522ACF8CC1000170F5 /* Tutorial_4.png */; };
-		CCEE17572ACF8CC1000170F5 /* Tutorial_3.png in Resources */ = {isa = PBXBuildFile; fileRef = CCEE17532ACF8CC1000170F5 /* Tutorial_3.png */; };
 		CCF9DA812A5C9C46004C1EAE /* SettingsMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA802A5C9C46004C1EAE /* SettingsMenuView.swift */; };
 		CCF9DA832A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA822A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift */; };
 		CCF9DA852A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA842A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift */; };
 		EB1FBC312B6BFD3900D56D89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4E3AC72A00BA4C0058AC20 /* Assets.xcassets */; };
 		EB1FBC332B6C00C600D56D89 /* WhisperSTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1FBC322B6C00C600D56D89 /* WhisperSTT.swift */; };
-		EB3299A92B6ED90700BDA3F9 /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3299A82B6ED90700BDA3F9 /* OpenAIService.swift */; };
-		EBFAC9282B76E72100EDC23F /* Tutorial_3_alt.png in Resources */ = {isa = PBXBuildFile; fileRef = EBFAC9272B76E72100EDC23F /* Tutorial_3_alt.png */; };
+		EBFC83EC2B77D76F00AFCCBB /* Tutorial_3.png in Resources */ = {isa = PBXBuildFile; fileRef = EBFC83EB2B77D76F00AFCCBB /* Tutorial_3.png */; };
+		EBFC83EE2B77D84B00AFCCBB /* SpeechConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFC83ED2B77D84B00AFCCBB /* SpeechConverter.swift */; };
 		F8B8D4792A71761700817A24 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */; };
 		F8BC4DE52A4DBD680005F6F0 /* DeviceScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC4DE42A4DBD680005F6F0 /* DeviceScreenView.swift */; };
 /* End PBXBuildFile section */
@@ -163,13 +162,12 @@
 		CCEE17502ACF8CC1000170F5 /* Tutorial_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tutorial_2.png; sourceTree = "<group>"; };
 		CCEE17512ACF8CC1000170F5 /* Tutorial_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tutorial_5.png; sourceTree = "<group>"; };
 		CCEE17522ACF8CC1000170F5 /* Tutorial_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tutorial_4.png; sourceTree = "<group>"; };
-		CCEE17532ACF8CC1000170F5 /* Tutorial_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tutorial_3.png; sourceTree = "<group>"; };
 		CCF9DA802A5C9C46004C1EAE /* SettingsMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuView.swift; sourceTree = "<group>"; };
 		CCF9DA822A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyPopupBoxView.swift; sourceTree = "<group>"; };
 		CCF9DA842A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModeAdaptiveImage.swift; sourceTree = "<group>"; };
 		EB1FBC322B6C00C600D56D89 /* WhisperSTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperSTT.swift; sourceTree = "<group>"; };
-		EB3299A82B6ED90700BDA3F9 /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
-		EBFAC9272B76E72100EDC23F /* Tutorial_3_alt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Tutorial_3_alt.png; path = ../../../../../../Desktop/Tutorial_3_alt.png; sourceTree = "<group>"; };
+		EBFC83EB2B77D76F00AFCCBB /* Tutorial_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tutorial_3.png; sourceTree = "<group>"; };
+		EBFC83ED2B77D84B00AFCCBB /* SpeechConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechConverter.swift; sourceTree = "<group>"; };
 		F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
 		F8BC4DE42A4DBD680005F6F0 /* DeviceScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -205,8 +203,7 @@
 			children = (
 				352D27F72A7B01820019EFDB /* SpinningMonocle.mp4 */,
 				CCEE17502ACF8CC1000170F5 /* Tutorial_2.png */,
-				EBFAC9272B76E72100EDC23F /* Tutorial_3_alt.png */,
-				CCEE17532ACF8CC1000170F5 /* Tutorial_3.png */,
+				EBFC83EB2B77D76F00AFCCBB /* Tutorial_3.png */,
 				CCEE17522ACF8CC1000170F5 /* Tutorial_4.png */,
 				CCEE17512ACF8CC1000170F5 /* Tutorial_5.png */,
 			);
@@ -318,7 +315,7 @@
 				CCCECE6A2A1EB4B100DBB7CA /* Whisper.swift */,
 				CCCECE6C2A1EE7C700DBB7CA /* AIError.swift */,
 				EB1FBC322B6C00C600D56D89 /* WhisperSTT.swift */,
-				EB3299A82B6ED90700BDA3F9 /* OpenAIService.swift */,
+				EBFC83ED2B77D84B00AFCCBB /* SpeechConverter.swift */,
 			);
 			path = AI;
 			sourceTree = "<group>";
@@ -575,7 +572,7 @@
 				CC6851682A9964C2004EA777 /* Tahoe.jpg in Resources */,
 				CC3FE00B2A09C0BF00756941 /* Settings.bundle in Resources */,
 				CC03F4912A8301E6006E9353 /* Statement_Chinese.m4a in Resources */,
-				EBFAC9282B76E72100EDC23F /* Tutorial_3_alt.png in Resources */,
+				EBFC83EC2B77D76F00AFCCBB /* Tutorial_3.png in Resources */,
 				CC212D6E2A9E6F130093479F /* monocle-fpga.bin in Resources */,
 				CC212D702A9E74870093479F /* audio.py in Resources */,
 				CC3FE0302A0EF81A00756941 /* Question_Lizards.m4a in Resources */,
@@ -592,7 +589,6 @@
 				CCEE17562ACF8CC1000170F5 /* Tutorial_4.png in Resources */,
 				CCCECE772A1EF36C00DBB7CA /* Question_Tootsie.wav in Resources */,
 				CCCECE742A1EF36C00DBB7CA /* Question_History.wav in Resources */,
-				CCEE17572ACF8CC1000170F5 /* Tutorial_3.png in Resources */,
 				EB1FBC312B6BFD3900D56D89 /* Assets.xcassets in Resources */,
 				CCCECE792A1EF36C00DBB7CA /* Question_Lizards.wav in Resources */,
 				CCCECE782A1EF36C00DBB7CA /* Question_CPU.wav in Resources */,
@@ -624,7 +620,6 @@
 				CCEE174F2ACF7E71000170F5 /* Tutorial.swift in Sources */,
 				CC27DC552A0304D600A942A9 /* TypingIndicatorView.swift in Sources */,
 				F8BC4DE52A4DBD680005F6F0 /* DeviceScreenView.swift in Sources */,
-				EB3299A92B6ED90700BDA3F9 /* OpenAIService.swift in Sources */,
 				CC00398B2A6A4F11009E3BAC /* BluetoothManager.swift in Sources */,
 				CC4E3AEF2A00BBE90058AC20 /* Message.swift in Sources */,
 				CC212D6A2A9D6FDB0093479F /* CVPixelBuffer+Extensions.swift in Sources */,
@@ -654,6 +649,7 @@
 				CC0039A52A6DA57E009E3BAC /* ContentView.swift in Sources */,
 				CC1632402AA6A0AC006A8E6A /* RGB343.swift in Sources */,
 				CC3FE00D2A09C8A400756941 /* Settings.swift in Sources */,
+				EBFC83EE2B77D84B00AFCCBB /* SpeechConverter.swift in Sources */,
 				F8B8D4792A71761700817A24 /* LoopingVideoPlayer.swift in Sources */,
 				CCD4B9022A93EB47004E3ADD /* NoaApp.swift in Sources */,
 				CC4E3AF32A00C4180058AC20 /* MessageView.swift in Sources */,
@@ -821,7 +817,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.3.0;
+				CURRENT_PROJECT_VERSION = 4.3.1;
 				DEVELOPMENT_ASSET_PATHS = "\"Noa/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = A64B5QV548;
@@ -840,7 +836,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.3;
+				MARKETING_VERSION = 4.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.thirdeye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -864,8 +860,8 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.3.0;
-				"CURRENT_PROJECT_VERSION[sdk=*]" = 4.3.0;
+				CURRENT_PROJECT_VERSION = 4.3.1;
+				"CURRENT_PROJECT_VERSION[sdk=*]" = 4.3.1;
 				DEVELOPMENT_ASSET_PATHS = "\"Noa/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = A64B5QV548;
@@ -884,7 +880,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.3;
+				MARKETING_VERSION = 4.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rootdowndigital.thirdeye;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -231,8 +231,10 @@ fileprivate struct ChatTextFieldView: View {
                 let sendButtonColor = textFieldEmpty ? Color(UIColor.systemGray) : Color(red: 87/255, green: 199/255, blue: 170/255)
                 Button(
                     action: {
-                        onTextSubmitted?(textInput)
-                        textInput = ""
+                        if let onTextSubmitted = onTextSubmitted {
+                            onTextSubmitted(textInput)
+                        }
+                        textInput = "" // Clear the text input after sending the message
                     },
                     label: {
                         Image(systemName: "arrow.up.circle.fill")
