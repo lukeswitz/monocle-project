@@ -281,7 +281,7 @@ extension Whisper: URLSessionDataDelegate {
             print("[Whisper] URLSessionDataTask failed to complete: \(error.localizedDescription)")
         } else {
             // Error == nil should indicate successful completion
-            print("[Whisper] URLSessionDataTask finished")
+            print("[Transcribe] Data task finished!")
         }
 
         // If there really was no error, we should have received data, triggered the completion,
