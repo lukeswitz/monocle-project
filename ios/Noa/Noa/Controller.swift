@@ -1010,15 +1010,17 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
                     print("Apple Speech Transcription: \(transcription)")
                     self._transcribedtext = transcription
                     if (self.mode == .transcriber){
-                        self.printToChat(transcription, as: .user)
+                        self.printToChat(transcription, as: .assistant)
                     }
                 case .failure(let error):
-                    // Handle error here
                     print("Error transcribing file: \(error)")
+                    self.printToChat(error.localizedDescription, as: .user)
                 }
             }
             
-            transcribeGPT(audioFile: fileData!, mode: mode)
+            if mode != .transcriber {
+                transcribeGPT(audioFile: fileData!, mode: mode)
+            }
         }
     }
     
@@ -1027,11 +1029,11 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
     private func transcribeGPT(audioFile fileData: Data, mode: ChatGPT.Mode) {
         print("[Controller] Transcribing voice...")
         
-        if (mode == .transcriber){
-            print("[Controller] In transcriber mode, handling locally.")
-            handleLocalTranscription(query: _transcribedtext)
+        if (mode == .transcriber) {
+            // Use local stt
             return
         } else {
+            // Use OpenAI
             _whisper.transcribe(mode: mode == .assistant ? .transcription : .translation, fileData: fileData, format: .m4a, apiKey: _settings.openAIKey) { [weak self] (query: String, error: AIError?) in
                 guard let self = self else { return }
                 if let error = error {
@@ -1065,7 +1067,6 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
         }
         
         print("[Controller] Sending transcript \(id) to ChatGPT as query: \(query)")
-        
         submitQuery(query: query, transcriptionID: id)
     }
     
@@ -1095,8 +1096,6 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
                 }
             }
         case .transcriber:
-       //     self.printToChat(self._transcribedtext, as: .user)
-            // In transcriber mode, handle the transcription locally without making a ChatGPT request
             print("[Controller] Transcription handled locally for \(id): \(query)")
         }
     }
@@ -1104,7 +1103,7 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
     
     private func handleLocalTranscription(query: String) {
         // Directly print the query as transcription result in transcriber mode
-        printToChat(query, as: .transcriber)
+       // printToChat(query, as: .transcriber)
     }
     
     private func generateImage(prompt: String) {
