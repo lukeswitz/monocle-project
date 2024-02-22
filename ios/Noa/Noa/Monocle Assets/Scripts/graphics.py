@@ -6,7 +6,7 @@ import re
 class Graphics:
     def __init__(self):
         self.MAX_LINES = 7
-        self.WORD_SPEED = 200
+        self.WORD_SPEED = 300
         self.FRAME_RATE = 20
         self.error_flag = False
         self.done_printing = False

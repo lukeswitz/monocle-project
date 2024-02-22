@@ -14,10 +14,10 @@ public class ChatGPT: NSObject {
         case backgroundUpload
     }
 
-    public enum Mode {
-        case assistant
-        case translator
-        case transcriber
+    public enum Mode: String {
+        case assistant = "assistant"
+        case translator = "translator"
+        case transcriber = "transcriber"
     }
 
     private static let _maxTokens = 4000    // 4096 for gpt-3.5-turbo and larger for gpt-4, but we use a conservative number to avoid hitting that limit
@@ -28,7 +28,7 @@ public class ChatGPT: NSObject {
 
     private static let _assistantPrompt = "You are a smart assistant that answers ALL user queries, questions, and statements with a single sentence. Be very faithful."
     private static let _translatorPrompt = "You are a smart assistant that translates user input to English. Translate as faithfully as you can and do not add any other commentary."
-    private static let _transcriberPrompt = "You are a smart assistant that translates our speech to text. Do not add any other commentary. Be very accurate."
+    private static let _transcriberPrompt = "You translate user speech to text, nothing more. Translate as faithfully as you can and do not add any other commentary."
 
 
     private var _payload: [String: Any] = [

@@ -137,6 +137,10 @@ struct ChatView: View {
                 _topLayerOpacity = opacity
             }
         }
+        .onAppear {
+            // Synchronize the chat mode with the persisted value in settings
+            $_mode.wrappedValue = _settings.chatMode
+        }
     }
 
     public init(

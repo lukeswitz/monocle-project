@@ -19,6 +19,9 @@ class Settings: ObservableObject {
 
     @Published private(set) var gptModel: String = ""
     private static let k_gptModel = "model"
+    
+    @Published private(set) var chatMode: ChatGPT.Mode = .assistant // Default value
+    private static let k_chatMode = "chat_mode"
 
     @Published private(set) var stabilityAIKey: String = ""
     private static let k_stabilityAIKey = "stability_api_key"
@@ -52,6 +55,8 @@ class Settings: ObservableObject {
         _gptModelToPrintableName = modelToPrintableName
 
         NotificationCenter.default.addObserver(self, selector: #selector(Self.onSettingsChanged), name: UserDefaults.didChangeNotification, object: nil)
+        
+        
         onSettingsChanged()
     }
 
@@ -175,7 +180,7 @@ class Settings: ObservableObject {
             self.openAIKey = openAIKey
         }
 
-        let model = UserDefaults.standard.string(forKey: Self.k_gptModel) ?? "gpt-3.5-turbo"
+        let model = UserDefaults.standard.string(forKey: Self.k_gptModel) ?? "gpt-3.5-turbo-0125"
         if model != self.gptModel {
             self.gptModel = model
         }
@@ -208,5 +213,19 @@ class Settings: ObservableObject {
         if self.pairedDeviceID != uuid {
             self.pairedDeviceID = uuid
         }
+        // Update chatMode based on UserDefaults
+        if let modeString = UserDefaults.standard.string(forKey: Self.k_chatMode),
+           let mode = ChatGPT.Mode(rawValue: modeString) {
+            chatMode = mode
+        }
     }
+    
+    public func setChatMode(_ mode: ChatGPT.Mode) {
+            chatMode = mode
+            UserDefaults.standard.set(mode.rawValue, forKey: Self.k_chatMode)
+        }
+
+        public func getChatMode() -> ChatGPT.Mode {
+            return chatMode
+        }
 }

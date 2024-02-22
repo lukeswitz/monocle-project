@@ -65,10 +65,10 @@ while True:
     elif state.current_state == state.Welcome:
         if state.on_entry():
             gfx.append_response(
-                """..:Monocle:..\nWaiting for iOS"""
+                """..:Monocle:..\n\nWaiting for iOS"""
             )
         if bluetooth.connected():
-            state.after(4000, state.Connected)
+            state.after(5000, state.Connected)
 
     elif state.current_state == state.Connected:
         if state.on_entry():

@@ -59,15 +59,26 @@ struct SettingsMenuView: View {
                 .foregroundColor(Color(red: 87/255, green: 199/255, blue: 170/255))
         }
         .onAppear {
-            _translateEnabled = mode == .translator
+            //_translateEnabled = mode == .translator
+            mode = _settings.getChatMode()
+            if (mode == .assistant){
+                
+            } else if (mode == .translator) {
+                _translateEnabled = true
+            }  else if (mode == .transcriber) {
+                _transcribeEnabled = true
+            }
+            
         }
         .onChange(of: _translateEnabled) { newValue in
             if newValue {
                 _transcribeEnabled = false // Disable transcribe when translate is enabled
                 mode = .translator
+                
             } else if !_transcribeEnabled {
                 mode = .assistant // If both are false, set mode to assistant
             }
+            _settings.setChatMode(mode)
             print("Mode: ", mode)
         }
         .onChange(of: _transcribeEnabled) { newValue in
@@ -78,6 +89,7 @@ struct SettingsMenuView: View {
                 mode = .assistant // If both are false, set mode to assistant
             }
             print("Mode: ", mode)
+            _settings.setChatMode(mode)
         }
     }
 }
