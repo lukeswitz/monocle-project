@@ -1,8 +1,4 @@
-# Third3ye for iOS: AI Chat for Monocle
-
-## Overview
-
-*Noa for iOS* is an application that pairs to your [Monocle](https://brilliant.xyz/products/monocle) and empowers you with access to ChatGPT anywhere you need it. Simply tap to speak a question and see the response appear in your field of view. The iOS application can also function as a standalone chat interface to ChatGPT, allowing queries to be entered via the iOS keyboard.
+### Third3ye - Fork of Noa for iOS
 
 ## Getting Started
 
