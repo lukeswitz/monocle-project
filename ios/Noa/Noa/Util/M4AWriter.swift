@@ -2,116 +2,96 @@ import AVFoundation
 import Foundation
 
 class M4AWriter: NSObject, AVAssetWriterDelegate {
-    private let _temporaryDirectory: URL
-    private var assetWriter: AVAssetWriter?
     private let writingQueue = DispatchQueue(label: "com.noa.m4awriter.queue")
+    private var assetWriter: AVAssetWriter?
     private var currentFileURL: URL?
+    private var lastFileURL: URL? // Store the last file URL for external access
 
-    override init() {
-        _temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
-        super.init()
+    private var temporaryDirectory: URL {
+        return URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
     }
-
+    
     deinit {
-        // Clean up the last file created
-        if let currentFileURL = currentFileURL {
-            delete(file: currentFileURL)
+        // Clean up the last file written if it hasn't been manually removed
+        if let currentFileURL = self.currentFileURL {
+            try? FileManager.default.removeItem(at: currentFileURL)
         }
     }
-
-    public func write(buffer: AVAudioPCMBuffer, completion: @escaping (Data?) -> Void) {
-        writingQueue.async {
-            self.setupAssetWriter(for: buffer, completion: completion)
-        }
-    }
-
-    private func load(file url: URL, completion: @escaping (Data?) -> Void) {
-        DispatchQueue.global(qos: .background).async {
-            let data = try? Data(contentsOf: url)
-            DispatchQueue.main.async {
-                completion(data)
-            }
-        }
-    }
-
-    private func setupAssetWriter(for buffer: AVAudioPCMBuffer, completion: @escaping (Data?) -> Void) {
+    
+    // Modify the completion handler to return both URL and Data
+    public func write(buffer: AVAudioPCMBuffer, completion: @escaping (URL?, Data?) -> Void) {
         guard let cmSampleBuffer = buffer.convertToCMSampleBuffer() else {
             DispatchQueue.main.async {
-                print("[M4AWriter] Error: Unable to convert PCM buffer to CMSampleBuffer")
-                completion(nil)
+                completion(nil, nil)
             }
             return
         }
-
-        let file = getFileURL()
-        currentFileURL = file
-
+        
+        let fileURL = temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("m4a")
+        self.currentFileURL = fileURL
+        
         do {
-            assetWriter = try AVAssetWriter(outputURL: file, fileType: .m4a)
+            self.assetWriter = try AVAssetWriter(outputURL: fileURL, fileType: .m4a)
         } catch {
             DispatchQueue.main.async {
-                print("[M4AWriter] Error: Unable to create asset writer: \(error.localizedDescription)")
-                completion(nil)
+                completion(nil, nil)
             }
             return
         }
-
-        guard let assetWriter = assetWriter else { return }
-
-        assetWriter.shouldOptimizeForNetworkUse = true
-
+        
+        guard let assetWriter = self.assetWriter else { return }
+        
         let audioSettings: [String: Any] = [
-            AVFormatIDKey: kAudioFormatMPEG4AAC,
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 44100,
             AVNumberOfChannelsKey: 1,
             AVEncoderBitRateKey: 128000
         ]
-
+        
         let audioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: audioSettings)
-        assetWriter.add(audioInput)
-
-        guard assetWriter.startWriting() else {
+        if assetWriter.canAdd(audioInput) {
+            assetWriter.add(audioInput)
+        } else {
             DispatchQueue.main.async {
-                print("[M4AWriter] Error: Unable to start writing: \(assetWriter.error?.localizedDescription ?? "unknown error")")
-                completion(nil)
+                completion(nil, nil)
             }
             return
         }
-
-        assetWriter.startSession(atSourceTime: .zero)
-        audioInput.append(cmSampleBuffer)
-        audioInput.markAsFinished()
         
-        assetWriter.finishWriting { [weak self] in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                if assetWriter.status == .completed {
-                    print("[M4AWriter] Created m4a file successfully")
-                    self.load(file: file, completion: completion)
-                    self.delete(file: file)
-                    self.currentFileURL = nil // Clear the current file URL after deletion
-                } else if assetWriter.status == .failed {
-                    print("[M4AWriter] Error: Failed to create m4a file: \(assetWriter.error?.localizedDescription ?? "unknown error") \(assetWriter.status)")
-                    completion(nil)
-                } else {
-                    print("[M4AWriter] Error: Failed to create m4a file")
-                    completion(nil)
+        assetWriter.startWriting()
+        assetWriter.startSession(atSourceTime: .zero)
+        
+        if audioInput.append(cmSampleBuffer) {
+            audioInput.markAsFinished()
+            
+            assetWriter.finishWriting { [weak self] in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    if assetWriter.status == .completed {
+                        self.lastFileURL = fileURL // Store the last successful file URL
+                        // Attempt to load the file data to return
+                        do {
+                            let fileData = try Data(contentsOf: fileURL)
+                            completion(fileURL, fileData)
+                        } catch {
+                            print("Failed to load file data: \(error)")
+                            completion(fileURL, nil) // Return the URL even if Data loading fails
+                        }
+                    } else {
+                        completion(nil, nil)
+                    }
+                    self.currentFileURL = nil // Reset the current file URL after writing
                 }
             }
-        }
-    }
-
-    private func getFileURL() -> URL {
-        return _temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("m4a")
-    }
-
-    private func delete(file url: URL) {
-        DispatchQueue.global(qos: .background).async {
-            do {
-                try FileManager.default.removeItem(at: url)
-            } catch {
-                print("[M4AWriter] Error: Unable to delete temporary file: \(url)")
+        } else {
+            DispatchQueue.main.async {
+                completion(nil, nil)
             }
         }
+    }
+    
+    // Method to retrieve the last file URL after successful write operation
+    public func getLastFileURL() -> URL? {
+        return lastFileURL
     }
 }
