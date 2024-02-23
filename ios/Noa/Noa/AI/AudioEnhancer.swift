@@ -37,16 +37,21 @@ class AudioEnhancer {
         memcpy(&signal, floatChannelData[0], Int(frameLength) * MemoryLayout<Float>.size)
         
         // Apply Band-Pass Filter
-        bandPassFilter(signal: &signal, sampleRate: sampleRate, lowCutoff: 300, highCutoff: 3400)
+        bandPassFilter(signal: &signal,
+		       sampleRate: sampleRate,
+		       lowCutoff: 300,
+		       highCutoff: 3400)
 								
-								// Apply EQ
-								applyEqualization(signal: &signal, sampleRate: sampleRate)
+	// Apply EQ
+	applyEqualization(signal: &signal, sampleRate: sampleRate)
 								
-								// Apply Noise gate filter
-								noiseGate(signal: floatChannelData, frameLength: frameLength)
+        // Apply Noise gate filter
+	noiseGate(signal: floatChannelData, frameLength: frameLength)
         
         // Apply Dynamic Range Compression
-					 	dynamicRangeCompression(signal: &signal, threshold: -20, ratio: 4.0)
+	dynamicRangeCompression(signal: &signal, 
+				threshold: -20, 
+				ratio: 4.0)
         
         // Copy processed signal back to the buffer
         memcpy(floatChannelData[0], signal, Int(frameLength) * MemoryLayout<Float>.size)
@@ -94,24 +99,27 @@ class AudioEnhancer {
         }
     }
 				
-				// EQ
-				func applyEqualization(signal: inout [Float], sampleRate: Float) {
-    let midFrequency = 1000.0 // 1 kHz for speech clarity
-    let Q = 0.707 // Quality factor for peaking EQ
-    let gainDB = 3.0 // Gain in dB
+    // EQ
+    func applyEqualization(signal: inout [Float], sampleRate: Float) {
     
-    // Calculate coefficients for peaking EQ
-    let coefficients = calculatePeakingEQCoefficients(sampleRate: sampleRate, frequency: midFrequency, gain: gainDB, Q: Q)
+	    let midFrequency = 1000.0 // 1 kHz for speech clarity
+	    let Q = 0.707 // Quality factor for peaking EQ
+	    let gainDB = 3.0 // Gain in dB
+
+	    // Calculate coefficients for peaking EQ
+	    let coefficients = calculatePeakingEQCoefficients(sampleRate: sampleRate, frequency: midFrequency, gain: gainDB, Q: Q)
+   
+	    // Apply EQ filter
+	    var biquadSetup = vDSP_biquadm_CreateSetup(coefficients, 1)!
+   
+	    var state = vDSP_biquadm_CreateState(biquadSetup)!
     
-    // Apply EQ filter
-    var biquadSetup = vDSP_biquadm_CreateSetup(coefficients, 1)!
-    var state = vDSP_biquadm_CreateState(biquadSetup)!
-    vDSP_biquadm_Apply(biquadSetup, state, &signal, &signal, vDSP_Length(signal.count))
-    
-    // Cleanup
-				vDSP_biquadm_DestroySetup(biquadSetup)
-    vDSP_biquadm_DestroyState(state)
-    }
+	    vDSP_biquadm_Apply(biquadSetup, state, &signal, &signal, vDSP_Length(signal.count))
+	    
+	    // Cleanup
+	    vDSP_biquadm_DestroySetup(biquadSetup)
+	    vDSP_biquadm_DestroyState(state)
+   }
 
     // Dynamic Range Compression
     private func dynamicRangeCompression(signal: inout [Float], threshold: Float, ratio: Float) {
