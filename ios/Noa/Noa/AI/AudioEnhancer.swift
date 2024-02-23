@@ -12,43 +12,66 @@ import Accelerate
 
 class AudioEnhancer {
 
-    func enhanceAudio(fileURL: URL, completion: @escaping (Bool, URL?) -> Void) {
-        guard let inputFile = try? AVAudioFile(forReading: fileURL),
-              let processingFormat = AVAudioFormat(standardFormatWithSampleRate: inputFile.fileFormat.sampleRate, channels: 1),
-              let buffer = AVAudioPCMBuffer(pcmFormat: processingFormat, frameCapacity: AVAudioFrameCount(inputFile.length)),
-              let floatChannelData = buffer.floatChannelData?.pointee else {
-            completion(false, nil)
+    // MARK: Process Audio File
+    func processAudio(inputURL: URL, outputURL: URL) {
+        guard let inputFile = try? AVAudioFile(forReading: inputURL),
+              let format = inputFile.processingFormat,
+              let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(inputFile.length)),
+              let floatChannelData = buffer.floatChannelData else {
+            print("Error: Unable to load audio file.")
             return
         }
 
         do {
             try inputFile.read(into: buffer)
         } catch {
-            completion(false, nil)
+            print("Error: Unable to read audio file. \(error.localizedDescription)")
             return
         }
 
-        // Apply DSP techniques
-        noiseGate(signal: floatChannelData, frameLength: buffer.frameLength)
-        applyBandPassFilter(signal: floatChannelData, sampleRate: processingFormat.sampleRate, frameLength: buffer.frameLength)
+        let frameLength = vDSP_Length(buffer.frameLength)
+        let sampleRate = Float(format.sampleRate)
         
-        // Assuming a simplistic dynamic range compression for demonstration
-        dynamicRangeCompression(signal: floatChannelData, frameLength: buffer.frameLength)
+        // Using mono, process audio
+        var signal = [Float](repeating: 0, count: Int(frameLength))
+        memcpy(&signal, floatChannelData[0], Int(frameLength) * MemoryLayout<Float>.size)
+        
+        // Apply Band-Pass Filter
+        bandPassFilter(signal: &signal, sampleRate: sampleRate, lowCutoff: 300, highCutoff: 3400)
+								
+								// Apply EQ
+								applyEqualization(signal: &signal, sampleRate: sampleRate)
+								
+								// Apply Noise gate filter
+								noiseGate(signal: floatChannelData, frameLength: frameLength)
+        
+        // Apply Dynamic Range Compression
+					 	dynamicRangeCompression(signal: &signal, threshold: -20, ratio: 4.0)
+        
+        // Copy processed signal back to the buffer
+        memcpy(floatChannelData[0], signal, Int(frameLength) * MemoryLayout<Float>.size)
 
         // Save the processed audio to a new file
-        saveProcessedBuffer(buffer, originalFileURL: fileURL, completion: completion)
+        let outputDestinationURL = fileURL.deletingLastPathComponent().appendingPathComponent("enhanced_\(fileURL.lastPathComponent)")
+        do {
+            let outputFile = try AVAudioFile(forWriting: outputDestinationURL, settings: buffer.format.settings)
+            try outputFile.write(from: buffer)
+            completion(true, outputDestinationURL)
+        } catch {
+            completion(false, nil)
+        }
     }
 
-    // Simple Noise Gate
+    // Noise Gate
     private func noiseGate(signal: UnsafeMutablePointer<Float>, frameLength: AVAudioFrameCount) {
-        let threshold: Float = 0.01 // Adjust based on your needs
+        let threshold: Float = 0.01
         for i in 0..<Int(frameLength) {
             signal[i] = (abs(signal[i]) > threshold) ? signal[i] : 0
         }
     }
     
     // Band-Pass Filter
-    private func applyBandPassFilter(signal: UnsafeMutablePointer<Float>, sampleRate: Double, frameLength: AVAudioFrameCount) {
+    private func bandPassFilter(signal: UnsafeMutablePointer<Float>, sampleRate: Double, frameLength: AVAudioFrameCount) {
         let n = Int(frameLength)
         var processedSignal = [Float](repeating: 0, count: n)
         
@@ -70,21 +93,37 @@ class AudioEnhancer {
             signal[i] = processedSignal[i]
         }
     }
+				
+				// EQ
+				func applyEqualization(signal: inout [Float], sampleRate: Float) {
+    let midFrequency = 1000.0 // 1 kHz for speech clarity
+    let Q = 0.707 // Quality factor for peaking EQ
+    let gainDB = 3.0 // Gain in dB
     
-    // Dynamic Range Compression
-    private func dynamicRangeCompression(signal: UnsafeMutablePointer<Float>, frameLength: AVAudioFrameCount) {
-        // Placeholder for dynamic range compression algorithm - signal amplitude based on a threshold we decide is ok
+    // Calculate coefficients for peaking EQ
+    let coefficients = calculatePeakingEQCoefficients(sampleRate: sampleRate, frequency: midFrequency, gain: gainDB, Q: Q)
+    
+    // Apply EQ filter
+    var biquadSetup = vDSP_biquadm_CreateSetup(coefficients, 1)!
+    var state = vDSP_biquadm_CreateState(biquadSetup)!
+    vDSP_biquadm_Apply(biquadSetup, state, &signal, &signal, vDSP_Length(signal.count))
+    
+    // Cleanup
+				vDSP_biquadm_DestroySetup(biquadSetup)
+    vDSP_biquadm_DestroyState(state)
     }
-    
-				// Save the enhanced audio file
-    private func saveProcessedBuffer(_ buffer: AVAudioPCMBuffer, originalFileURL: URL, completion: @escaping (Bool, URL?) -> Void) {
-        let outputURL = originalFileURL.deletingLastPathComponent().appendingPathComponent("enhanced_\(originalFileURL.lastPathComponent)")
-        do {
-            let outputFile = try AVAudioFile(forWriting: outputURL, settings: buffer.format.settings)
-            try outputFile.write(from: buffer)
-            completion(true, outputURL)
-        } catch {
-            completion(false, nil)
+
+    // Dynamic Range Compression
+    private func dynamicRangeCompression(signal: inout [Float], threshold: Float, ratio: Float) {
+        let linearThreshold = pow(10.0, threshold / 20.0)
+        
+        for i in 0..<signal.count {
+            let magnitude = abs(signal[i])
+            if magnitude > linearThreshold {
+                let overThreshold = magnitude - linearThreshold
+                let compressedMagnitude = linearThreshold + overThreshold / ratio
+                signal[i] = signal[i] > 0 ? compressedMagnitude : -compressedMagnitude
+            }
         }
     }
 }
