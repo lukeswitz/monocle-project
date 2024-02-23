@@ -1,6 +1,5 @@
 //
 //  SpeechConverter.swift
-//  Noa
 //
 //  Created by Luke on 2/10/24.
 //

@@ -171,7 +171,7 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
     private let _audioEngine = AVAudioEngine()
     private var _playerNode = AVAudioPlayerNode()
     private var _audioConverter: AVAudioConverter?
-    private var _playbackFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 48000, channels: 1, interleaved: false)!
+    private var _playbackFormat = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: 44100, channels: 1, interleaved: false)!
     private let _monocleFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: 8000, channels: 1, interleaved: false)!
     
     // MARK: Public State
@@ -560,7 +560,7 @@ class Controller: ObservableObject, LoggerDelegate, DFUServiceDelegate, DFUProgr
     
     private func handleSerialDataReceived(_ receivedValue: Data) {
         let str = String(decoding: receivedValue, as: UTF8.self)
-        print("[Controller] Serial data from Monocle: \(str)")
+        //print("[Controller] Serial data from Monocle: \(str)")
         
         switch _state {
         case .waitingForRawREPL(didFinishDFU: let didFinishDFU):

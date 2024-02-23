@@ -72,7 +72,6 @@
 		CCF9DA832A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA822A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift */; };
 		CCF9DA852A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF9DA842A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift */; };
 		EB1FBC312B6BFD3900D56D89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4E3AC72A00BA4C0058AC20 /* Assets.xcassets */; };
-		EB1FBC332B6C00C600D56D89 /* WhisperSTT.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1FBC322B6C00C600D56D89 /* WhisperSTT.swift */; };
 		EBFC83EC2B77D76F00AFCCBB /* Tutorial_3.png in Resources */ = {isa = PBXBuildFile; fileRef = EBFC83EB2B77D76F00AFCCBB /* Tutorial_3.png */; };
 		EBFC83EE2B77D84B00AFCCBB /* SpeechConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFC83ED2B77D84B00AFCCBB /* SpeechConverter.swift */; };
 		F8B8D4792A71761700817A24 /* LoopingVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */; };
@@ -165,7 +164,6 @@
 		CCF9DA802A5C9C46004C1EAE /* SettingsMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuView.swift; sourceTree = "<group>"; };
 		CCF9DA822A5C9DFB004C1EAE /* APIKeyPopupBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyPopupBoxView.swift; sourceTree = "<group>"; };
 		CCF9DA842A5E5FFC004C1EAE /* ColorModeAdaptiveImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorModeAdaptiveImage.swift; sourceTree = "<group>"; };
-		EB1FBC322B6C00C600D56D89 /* WhisperSTT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperSTT.swift; sourceTree = "<group>"; };
 		EBFC83EB2B77D76F00AFCCBB /* Tutorial_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tutorial_3.png; sourceTree = "<group>"; };
 		EBFC83ED2B77D84B00AFCCBB /* SpeechConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechConverter.swift; sourceTree = "<group>"; };
 		F8B8D4782A71761700817A24 /* LoopingVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopingVideoPlayer.swift; sourceTree = "<group>"; };
@@ -314,8 +312,6 @@
 				CC6851592A9933F8004EA777 /* DallE.swift */,
 				CCCECE6A2A1EB4B100DBB7CA /* Whisper.swift */,
 				CCCECE6C2A1EE7C700DBB7CA /* AIError.swift */,
-				EB1FBC322B6C00C600D56D89 /* WhisperSTT.swift */,
-				EBFC83ED2B77D84B00AFCCBB /* SpeechConverter.swift */,
 			);
 			path = AI;
 			sourceTree = "<group>";
@@ -441,6 +437,7 @@
 		CCB2F9642A2598E900F24F2D /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				EBFC83ED2B77D84B00AFCCBB /* SpeechConverter.swift */,
 				CCB2F9672A25990F00F24F2D /* UtilNamespace.swift */,
 				CCB2F9652A2598F600F24F2D /* HexDump.swift */,
 				CC200A542A3D589D005C67E0 /* StreamingStringMatcher.swift */,
@@ -637,7 +634,6 @@
 				CC200A552A3D589D005C67E0 /* StreamingStringMatcher.swift in Sources */,
 				CC0039A12A6DA51A009E3BAC /* PopupDeviceView.swift in Sources */,
 				CC4E3AF72A01AA350058AC20 /* ChatView.swift in Sources */,
-				EB1FBC332B6C00C600D56D89 /* WhisperSTT.swift in Sources */,
 				CC202CC02A9036C400A71EE4 /* TimestampView.swift in Sources */,
 				CC3FE01F2A0DF21700756941 /* AppDelegate.swift in Sources */,
 				CC3FE0212A0DF25100756941 /* SceneDelegate.swift in Sources */,
